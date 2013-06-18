@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">SAP ABAP Quiz</string>
+    <string name="action_settings">Settings</string>
+    
+    <string-array name="DifficultyLevel">
+        <item >Easy</item>
+        <item >Medium</item>
+        <item >Difficult</item>
+    </string-array>
+
+</resources>
