@@ -17,10 +17,13 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
-public class Main extends Activity implements Invoker, OnNavigationListener {
+public class Main extends Activity implements Invoker, OnNavigationListener, OnItemClickListener {
 	
 	private Application app;
 	private ProgressDialog dialog;
@@ -28,7 +31,8 @@ public class Main extends Activity implements Invoker, OnNavigationListener {
 	private boolean appClosing;
 	private ActionBar actionBar;
 	private ListView listView;
-	private ArrayAdapter adapter;
+	private QuizListAdapter adapter;
+	private List<Quiz> quizList;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -44,8 +48,7 @@ public class Main extends Activity implements Invoker, OnNavigationListener {
 		app.setContext(this);
 		
 		listView = (ListView) findViewById(R.id.myList);
-		adapter = new ArrayAdapter<Quiz>(this,R.layout.quiz_list_row);
-		listView.setAdapter(adapter);
+		listView.setOnItemClickListener(this);
 		
 		// Get Action Bar
 		actionBar = getActionBar();
@@ -98,20 +101,18 @@ public class Main extends Activity implements Invoker, OnNavigationListener {
 	private void startMainScreen() {
 		// TODO - Varun to design
 		
-		// Set the actionbar items
-		 ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.DifficultyLevel, android.R.layout.simple_spinner_item);
-	     adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		// Set the action bar items
+		 ArrayAdapter<CharSequence> ABAdapter = ArrayAdapter.createFromResource(this, R.array.DifficultyLevel, android.R.layout.simple_spinner_item);
+		 ABAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 	     
-	     actionBar.setListNavigationCallbacks(adapter, this);
+	     actionBar.setListNavigationCallbacks(ABAdapter, this);
 	     
-	     loadQuizListByLevel(1);	// 1 => Easy
+	     quizList = app.getQuizListByLevel(1);	// 1 => Easy
 	     
-	}
-
-	private void loadQuizListByLevel(int level) {
-		// Load Quiz List by Level
-		List<Quiz> quizList = app.getQuizListByLevel(level);
-		
+	     // Adapter for the Quiz List
+	     adapter = new QuizListAdapter(this, R.layout.quiz_list_row, quizList);
+	     listView.setAdapter(adapter);
+	     
 	}
 
 	@Override
@@ -187,8 +188,29 @@ public class Main extends Activity implements Invoker, OnNavigationListener {
 
 	@Override
 	public boolean onNavigationItemSelected(int pos, long id) {
-		// TODO Auto-generated method stub
+		/* TODO - Varun to implement
+		 * On click of toolbar spinner item 
+		 */
+		
+		quizList = app.getQuizListByLevel(pos + 1);	// 1 => Easy, 2 => Medium, 3 => Difficult
+		adapter.notifyDataSetChanged();
 		return true;
+	}
+
+	@Override
+	public void onItemClick(AdapterView<?> parent, View view, int pos, long id) {
+		/*
+		 * TODO - Varun to do
+		 * Load Questions for this quiz
+		 * Start new activity
+		 */
+		
+		Quiz quiz = quizList.get(pos);
+		
+		Intent startQuiz = new Intent(Main.this, StartQuiz.class);
+		startQuiz.putExtra("QuizId", quiz.getQuizId());
+		startActivity(startQuiz);
+		
 	}
 
 }
