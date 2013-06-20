@@ -61,6 +61,7 @@ public class Main extends Activity implements Invoker, OnNavigationListener, OnI
 		super.onStart();
 		
 		// Accept my Terms
+		app.setEULAResult(true);	//TODO Remove in production version
         if(!app.isEULAAccepted()){
         	// Show EULA.
         	Intent eula = new Intent(Main.this, DisplayFile.class);

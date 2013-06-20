@@ -3,6 +3,7 @@
 
     <string name="app_name">SAP ABAP Quiz</string>
     <string name="action_settings">Settings</string>
+    <string name="AppURL">http://varunverma.org</string>
     
     <string-array name="DifficultyLevel">
         <item >Easy</item>

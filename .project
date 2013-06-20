@@ -30,4 +30,16 @@
 		<nature>com.android.ide.eclipse.adt.AndroidNature</nature>
 		<nature>org.eclipse.jdt.core.javanature</nature>
 	</natures>
+	<linkedResources>
+		<link>
+			<name>hq-src</name>
+			<type>2</type>
+			<location>/home/varun/Android-Development/Dev-Projects/HQF-Client/src</location>
+		</link>
+		<link>
+			<name>hqf-src</name>
+			<type>2</type>
+			<location>/home/varun/Android-Development/Dev-Projects/HQF-Client/src</location>
+		</link>
+	</linkedResources>
 </projectDescription>
