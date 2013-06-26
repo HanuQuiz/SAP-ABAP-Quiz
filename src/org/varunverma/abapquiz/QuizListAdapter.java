@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.TextView;
 
 public class QuizListAdapter extends ArrayAdapter<Quiz> {
 
@@ -46,6 +47,11 @@ public class QuizListAdapter extends ArrayAdapter<Quiz> {
 		}
 		
 		//TODO - Populate UI from the Quiz Attributes
+		TextView title = (TextView) rowView.findViewById(R.id.title);
+		title.setText("Quiz: " + quiz.getQuizId());
+		
+		TextView desc = (TextView) rowView.findViewById(R.id.desc);
+		desc.setText(quiz.getCount() + " questions");
 		
 		return rowView;
 		
