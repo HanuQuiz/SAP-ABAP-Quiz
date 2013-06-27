@@ -3,6 +3,9 @@
  */
 package org.varunverma.abapquiz;
 
+import java.util.HashMap;
+import java.util.Iterator;
+
 import org.varunverma.hanuquiz.Question;
 import org.varunverma.hanuquiz.QuizManager;
 
@@ -12,6 +15,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
+import android.widget.CheckBox;
+import android.widget.LinearLayout;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 
 /**
  * @author varun
@@ -68,6 +75,45 @@ public class QuestionFragment extends Fragment {
 		String html = question.getHTML();
 		
 		wv.loadDataWithBaseURL("fake://not/needed", html, "text/html", "UTF-8", "");
+		
+		RadioGroup rg = (RadioGroup) rootView.findViewById(R.id.single_choice);
+		LinearLayout ll = (LinearLayout) rootView.findViewById(R.id.multiple_choice);
+		
+		if(question.getChoiceType() == 1){
+			// Single Choice
+			ll.setVisibility(View.GONE);
+			rg.setVisibility(View.VISIBLE);
+		}
+		else{
+			// Multiple Choice
+			rg.setVisibility(View.GONE);
+			ll.setVisibility(View.VISIBLE);
+		}
+		
+		HashMap<Integer,String> options = question.getOptions();
+		
+		Iterator<Integer> i = options.keySet().iterator();
+		while(i.hasNext()){
+			
+			int optionId = i.next();
+			String optionValue = options.get(optionId);
+			
+			if(question.getChoiceType() == 1){
+				// Single Choice
+				RadioButton rb = new RadioButton(getActivity());
+				rb.setTag(String.valueOf(optionId));
+				rb.setText(optionValue);
+				rg.addView(rb);
+			}
+			else{
+				// Single Choice
+				CheckBox cb = new CheckBox(getActivity());
+				cb.setTag(String.valueOf(optionId));
+				cb.setText(optionValue);
+				ll.addView(cb);
+			}
+			
+		}
 		
 		return rootView;
 		
