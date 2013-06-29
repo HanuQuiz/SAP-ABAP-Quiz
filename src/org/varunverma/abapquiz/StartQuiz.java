@@ -3,6 +3,9 @@
  */
 package org.varunverma.abapquiz;
 
+import org.varunverma.hanuquiz.Quiz;
+import org.varunverma.hanuquiz.QuizManager;
+
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.PagerAdapter;
@@ -12,7 +15,7 @@ import android.support.v4.view.ViewPager;
  * @author Varun
  *
  */
-public class StartQuiz extends FragmentActivity {
+public class StartQuiz extends FragmentActivity implements IF_QuizUI{
 
 	private ViewPager viewPager;
 	private PagerAdapter pagerAdapter;
@@ -54,6 +57,19 @@ public class StartQuiz extends FragmentActivity {
 		
 		super.onBackPressed();
 
+	}
+
+	@Override
+	public void evaluateQuiz() {
+		
+		Quiz quiz = QuizManager.getInstance().getQuizById(quizId);
+		quiz.evaluateQuiz();
+		
+	}
+
+	@Override
+	public void finishQuiz() {
+		finish();		
 	}
 	
 }

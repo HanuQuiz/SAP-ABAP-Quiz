@@ -1,0 +1,54 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:ads="http://schemas.android.com/apk/lib/com.google.ads"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin" >
+
+    <com.google.ads.AdView
+        android:id="@+id/adView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        ads:adSize="BANNER"
+        ads:adUnitId="a1506bd5e27e640" >
+    </com.google.ads.AdView>
+
+    <Button
+        android:id="@+id/evaluate_quiz"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:padding="25dp"
+        android:text="@string/evluate_quiz"
+        android:textAppearance="?android:attr/textAppearanceLarge" >
+    </Button>
+
+    <TextView
+        android:id="@+id/quiz_result"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/evaluate_quiz"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:gravity="center"
+        android:text="@string/quiz_result"
+        android:textSize="60sp"
+        android:textAppearance="?android:attr/textAppearanceLarge" >
+    </TextView>
+    
+    <Button
+        android:id="@+id/done"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/evaluate_quiz"
+        android:layout_centerHorizontal="true"
+        android:padding="25dp"
+        android:text="@string/done"
+        android:textAppearance="?android:attr/textAppearanceLarge" >
+    </Button>
+
+</RelativeLayout>

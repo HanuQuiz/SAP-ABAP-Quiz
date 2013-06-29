@@ -5,6 +5,12 @@
     <string name="action_settings">Settings</string>
     <string name="AppURL">http://hanu-quiz.varunverma.org/Applications/AQ</string>
     
+    <string name="evluate_quiz">Evaluate Quiz</string>
+    <string name="done">Done</string>
+    <string name="quiz_result">6 / 10</string>
+    <string name="ok">OK</string>
+    <string name="reset">Reset</string>
+    
     <string-array name="DifficultyLevel">
         <item >Easy</item>
         <item >Medium</item>

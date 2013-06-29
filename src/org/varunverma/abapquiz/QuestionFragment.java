@@ -3,8 +3,10 @@
  */
 package org.varunverma.abapquiz;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 
 import org.varunverma.hanuquiz.Question;
 import org.varunverma.hanuquiz.QuizManager;
@@ -13,9 +15,12 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.webkit.WebView;
+import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -28,6 +33,8 @@ public class QuestionFragment extends Fragment {
 
 	private int questionId;
 	private int quizId;
+	private Question question;
+	private List<CompoundButton> optionButtonList;
 	
 	public static QuestionFragment create(int quizId, int questionId){
 		
@@ -67,10 +74,7 @@ public class QuestionFragment extends Fragment {
 		
 		WebView wv = (WebView) rootView.findViewById(R.id.webview);
 		
-		/*
-		 * TODO - Varun to populate the question
-		 */
-		Question question = QuizManager.getInstance().getQuizById(quizId).getQuestion(questionId);
+		question = QuizManager.getInstance().getQuizById(quizId).getQuestion(questionId);
 		
 		String html = question.getHTML();
 		
@@ -78,6 +82,8 @@ public class QuestionFragment extends Fragment {
 		
 		RadioGroup rg = (RadioGroup) rootView.findViewById(R.id.single_choice);
 		LinearLayout ll = (LinearLayout) rootView.findViewById(R.id.multiple_choice);
+		
+		optionButtonList = new ArrayList<CompoundButton>();
 		
 		if(question.getChoiceType() == 1){
 			// Single Choice
@@ -104,6 +110,7 @@ public class QuestionFragment extends Fragment {
 				rb.setTag(String.valueOf(optionId));
 				rb.setText(optionValue);
 				rg.addView(rb);
+				optionButtonList.add(rb);
 			}
 			else{
 				// Single Choice
@@ -111,9 +118,49 @@ public class QuestionFragment extends Fragment {
 				cb.setTag(String.valueOf(optionId));
 				cb.setText(optionValue);
 				ll.addView(cb);
+				optionButtonList.add(cb);
 			}
 			
 		}
+		
+		Button reset = (Button) rootView.findViewById(R.id.reset);
+		Button ok = (Button) rootView.findViewById(R.id.ok);
+		
+		reset.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				
+				Iterator<CompoundButton> i = optionButtonList.iterator();
+				while(i.hasNext()){
+					i.next().setChecked(false);
+				}
+				
+			}
+		});
+		
+		ok.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				
+				String answer = "";
+				
+				Iterator<CompoundButton> i = optionButtonList.iterator();
+				while(i.hasNext()){
+					
+					CompoundButton cb = i.next();
+					if(cb.isChecked()){
+						answer = answer + "," + cb.getTag();
+					}
+					
+				}
+				
+				answer = answer.substring(1, answer.length());
+				question.updateMyAnswer(answer);
+				
+			}
+		});
 		
 		return rootView;
 		

@@ -34,7 +34,14 @@ public class QuizPagerAdapter extends FragmentStatePagerAdapter {
 	 */
 	@Override
 	public Fragment getItem(int pos) {
-		return QuestionFragment.create(quizId, pos);
+		
+		if(pos < questionCount){
+			return QuestionFragment.create(quizId, pos);
+		}
+		else{
+			return QuizResultFragment.create(quizId);
+		}
+		
 	}
 
 	/* (non-Javadoc)
@@ -42,7 +49,7 @@ public class QuizPagerAdapter extends FragmentStatePagerAdapter {
 	 */
 	@Override
 	public int getCount() {
-		return questionCount;
+		return questionCount + 1;
 	}
 
 }
