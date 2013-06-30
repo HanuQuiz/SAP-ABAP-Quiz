@@ -5,10 +5,12 @@ import java.util.List;
 import org.varunverma.hanuquiz.Quiz;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 public class QuizListAdapter extends ArrayAdapter<Quiz> {
@@ -46,12 +48,48 @@ public class QuizListAdapter extends ArrayAdapter<Quiz> {
 			}
 		}
 		
-		//TODO - Populate UI from the Quiz Attributes
-		TextView title = (TextView) rowView.findViewById(R.id.title);
-		title.setText("Quiz: " + quiz.getQuizId());
+		// Set Icon
+		ImageView quizIcon = (ImageView) rowView.findViewById(R.id.status);
+		if(quiz.getStatus() == Quiz.QuizStatus.Completed){
+			quizIcon.setImageResource(R.drawable.completed);
+		}
+		else if(quiz.getStatus() == Quiz.QuizStatus.Paused){
+			quizIcon.setImageResource(R.drawable.pause);
+		}
+		else{
+			// TODO - Remove after testing. No icon as of now.
+			quizIcon.setImageResource(R.drawable.completed);
+		}
 		
+		TextView title = (TextView) rowView.findViewById(R.id.title);
+		title.setText(quiz.getDescription());
+		
+		//TODO - Also show the last played time
 		TextView desc = (TextView) rowView.findViewById(R.id.desc);
 		desc.setText(quiz.getCount() + " questions");
+		
+		TextView score = (TextView) rowView.findViewById(R.id.score);
+		if(quiz.getStatus() == Quiz.QuizStatus.Completed){
+			// If completed, then only show the score
+			String quizScore = quiz.getScore() + "/" + quiz.getCount();
+			score.setText(quizScore);
+			
+			int perct = quiz.getScore() / quiz.getCount();
+			if(perct >= 7){
+				score.setTextColor(Color.GREEN);
+			}
+			else if(perct < 5){
+				score.setTextColor(Color.RED);
+			}
+			else{
+				score.setTextColor(Color.MAGENTA);
+			}
+			
+		}
+		else{
+			//TODO - Remove after testing
+			score.setText("10/10");
+		}
 		
 		return rowView;
 		

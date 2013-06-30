@@ -1,5 +1,6 @@
 package org.varunverma.abapquiz;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.varunverma.CommandExecuter.Invoker;
@@ -108,7 +109,8 @@ public class Main extends Activity implements Invoker, OnNavigationListener, OnI
 	     
 	     actionBar.setListNavigationCallbacks(ABAdapter, this);
 	     
-	     quizList = app.getQuizListByLevel(1);	// 1 => Easy
+	     quizList = new ArrayList<Quiz>();
+	     quizList.addAll(app.getQuizListByLevel(1));	// 1 => Easy
 	     
 	     // Adapter for the Quiz List
 	     adapter = new QuizListAdapter(this, R.layout.quiz_list_row, quizList);
@@ -193,7 +195,8 @@ public class Main extends Activity implements Invoker, OnNavigationListener, OnI
 		 * On click of toolbar spinner item 
 		 */
 		
-		quizList = app.getQuizListByLevel(pos + 1);	// 1 => Easy, 2 => Medium, 3 => Difficult
+		quizList.clear();
+		quizList.addAll(app.getQuizListByLevel(pos + 1));	// 1 => Easy, 2 => Medium, 3 => Difficult
 		adapter.notifyDataSetChanged();
 		return true;
 	}
