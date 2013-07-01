@@ -42,6 +42,6 @@
         android:layout_toLeftOf="@id/score"
         android:layout_toRightOf="@id/status"
         android:text="@string/app_name"
-        android:textSize="10sp" />
+        android:textSize="12sp" />
 
 </RelativeLayout>

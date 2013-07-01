@@ -11,6 +11,7 @@ import java.util.List;
 import org.varunverma.hanuquiz.Question;
 import org.varunverma.hanuquiz.QuizManager;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -34,6 +35,7 @@ public class QuestionFragment extends Fragment {
 	private int questionId;
 	private int quizId;
 	private Question question;
+	private IF_QuizUI activity;
 	private List<CompoundButton> optionButtonList;
 	
 	public static QuestionFragment create(int quizId, int questionId){
@@ -156,13 +158,33 @@ public class QuestionFragment extends Fragment {
 					
 				}
 				
-				answer = answer.substring(1, answer.length());
+				if(answer.length() > 1){
+					answer = answer.substring(1, answer.length());
+				}
+				
 				question.updateMyAnswer(answer);
+				activity.nextQuestion();
 				
 			}
 		});
 		
 		return rootView;
+		
+	}
+	
+	@Override
+	public void onAttach(Activity activity) {
+		
+		super.onAttach(activity);
+		this.activity = (IF_QuizUI) activity;
+		
+	}
+
+	@Override
+	public void onDetach() {
+		
+		super.onDetach();
+		activity = null;
 		
 	}
 
