@@ -7,7 +7,6 @@ import java.io.InputStreamReader;
 
 import org.varunverma.hanuquiz.Application;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.res.Configuration;
 import android.content.res.Resources;
@@ -15,8 +14,6 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
-import android.webkit.JavascriptInterface;
-import android.webkit.WebSettings;
 import android.webkit.WebView;
 
 public class DisplayFile extends Activity {
@@ -25,7 +22,6 @@ public class DisplayFile extends Activity {
 	private WebView my_web_view;
 	Application app = Application.getApplicationInstance();
 	
-	@SuppressLint("SetJavaScriptEnabled")
 	@Override
     public void onCreate(Bundle savedInstanceState) {
 		
@@ -33,9 +29,6 @@ public class DisplayFile extends Activity {
         setContentView(R.layout.web_view);
         
         my_web_view = (WebView) findViewById(R.id.webview);
-        WebSettings webSettings = my_web_view.getSettings();
-		webSettings.setJavaScriptEnabled(true);
-		my_web_view.addJavascriptInterface(new FileJavaScriptInterface(), "File");
         
         String title = this.getIntent().getStringExtra("Title");
         if(title == null || title.contentEquals("")){
@@ -112,24 +105,5 @@ public class DisplayFile extends Activity {
 		} catch (IOException e) {
 			Log.e(Application.TAG, e.getMessage(), e);
 		}
-	}
-
-	class FileJavaScriptInterface{
-		
-		@JavascriptInterface
-		public void buttonClick(String buttonName){
-			
-			if(buttonName.contentEquals("accept")){
-				Application.getApplicationInstance().setEULAResult(true);
-			}
-			else if(buttonName.contentEquals("reject")){
-				Application.getApplicationInstance().setEULAResult(false);
-			}
-			
-			setResult(RESULT_OK);       
-			finish();
-			
-		}
-	
 	}
 }

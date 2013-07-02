@@ -1,9 +1,24 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android" >
-
+	
     <item
-        android:id="@+id/action_settings"
+        android:id="@+id/help"
+        android:orderInCategory="10"
+        android:showAsAction="ifRoom"
+        android:icon="@drawable/help"
+        android:title="@string/action_help"/>
+    
+    <item
+        android:id="@+id/about"
+        android:orderInCategory="20"
+        android:showAsAction="ifRoom"
+        android:icon="@drawable/about"
+        android:title="@string/action_about"/>
+    
+    <item
+        android:id="@+id/settings"
         android:orderInCategory="100"
-        android:showAsAction="never"
+        android:showAsAction="ifRoom"
+        android:icon="@drawable/settings"
         android:title="@string/action_settings"/>
 
 </menu>
