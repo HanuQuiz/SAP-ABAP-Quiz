@@ -80,7 +80,7 @@ public class Main extends Activity implements Invoker, OnNavigationListener, OnI
 	private void startMainActivity() {
 		
 		// Register application.
-        app.registerAppForGCM();
+        //app.registerAppForGCM();
 		
 		// Initialize app...
 		if (app.isThisFirstUse()) {

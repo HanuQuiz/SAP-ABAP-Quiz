@@ -3,3 +3,5 @@ gen
 bin
 .classpath
 .project
+/*.project
+/.classpath
