@@ -1,6 +1,7 @@
 package org.varunverma.abapquiz;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.varunverma.CommandExecuter.Invoker;
@@ -85,7 +86,7 @@ public class Main extends Activity implements Invoker, OnNavigationListener, OnI
 	private void startMainActivity() {
 		
 		// Register application.
-        app.registerAppForGCM();
+        //app.registerAppForGCM();
 		
 		// Initialize app...
 		if (app.isThisFirstUse()) {
@@ -124,6 +125,7 @@ public class Main extends Activity implements Invoker, OnNavigationListener, OnI
 	     
 	     quizList = new ArrayList<Quiz>();
 	     quizList.addAll(app.getQuizListByLevel(1));	// 1 => Easy
+	     Collections.sort(quizList, Quiz.SortByID);
 	     
 	     // Adapter for the Quiz List
 	     adapter = new QuizListAdapter(this, R.layout.quiz_list_row, quizList);
@@ -238,6 +240,7 @@ public class Main extends Activity implements Invoker, OnNavigationListener, OnI
 		
 		quizList.clear();
 		quizList.addAll(app.getQuizListByLevel(pos + 1));	// 1 => Easy, 2 => Medium, 3 => Difficult
+		Collections.sort(quizList, Quiz.SortByID);
 		adapter.notifyDataSetChanged();
 		return true;
 	}

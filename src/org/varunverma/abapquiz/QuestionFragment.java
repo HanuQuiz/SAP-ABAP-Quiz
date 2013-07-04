@@ -15,11 +15,12 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.webkit.WebView;
-import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.LinearLayout;
@@ -65,6 +66,10 @@ public class QuestionFragment extends Fragment {
         
         questionId = getArguments().getInt("QuestionId");
         quizId = getArguments().getInt("QuizId");
+        
+        activity.attachFragment(questionId, this);
+        
+        setHasOptionsMenu(true);
     }
 	
 	@Override
@@ -125,50 +130,29 @@ public class QuestionFragment extends Fragment {
 			
 		}
 		
-		Button reset = (Button) rootView.findViewById(R.id.reset);
-		Button ok = (Button) rootView.findViewById(R.id.ok);
-		
-		reset.setOnClickListener(new OnClickListener() {
-			
-			@Override
-			public void onClick(View v) {
-				
-				Iterator<CompoundButton> i = optionButtonList.iterator();
-				while(i.hasNext()){
-					i.next().setChecked(false);
-				}
-				
-			}
-		});
-		
-		ok.setOnClickListener(new OnClickListener() {
-			
-			@Override
-			public void onClick(View v) {
-				
-				String answer = "";
-				
-				Iterator<CompoundButton> i = optionButtonList.iterator();
-				while(i.hasNext()){
-					
-					CompoundButton cb = i.next();
-					if(cb.isChecked()){
-						answer = answer + "," + cb.getTag();
-					}
-					
-				}
-				
-				if(answer.length() > 1){
-					answer = answer.substring(1, answer.length());
-				}
-				
-				question.updateMyAnswer(answer);
-				activity.nextQuestion();
-				
-			}
-		});
-		
 		return rootView;
+		
+	}
+	
+	public void saveAnswers(){
+		
+		String answer = "";
+		
+		Iterator<CompoundButton> i = optionButtonList.iterator();
+		while(i.hasNext()){
+			
+			CompoundButton cb = i.next();
+			if(cb.isChecked()){
+				answer = answer + "," + cb.getTag();
+			}
+			
+		}
+		
+		if(answer.length() > 1){
+			answer = answer.substring(1, answer.length());
+		}
+		
+		question.updateMyAnswer(answer);
 		
 	}
 	
@@ -184,7 +168,32 @@ public class QuestionFragment extends Fragment {
 	public void onDetach() {
 		
 		super.onDetach();
+		saveAnswers();
+		activity.removeFragment(questionId);
 		activity = null;
+		
+	}
+	
+	@Override
+	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+		// Inflate the menu; this adds items to the action bar if it is present.
+		inflater.inflate(R.menu.question, menu);
+	}
+	
+	@Override
+	public boolean onOptionsItemSelected (MenuItem item){
+		
+		if(item.getItemId() == R.id.reset){
+			
+			Iterator<CompoundButton> i = optionButtonList.iterator();
+			while(i.hasNext()){
+				i.next().setChecked(false);
+			}
+			
+			return true;
+		}
+		
+		return false;
 		
 	}
 
