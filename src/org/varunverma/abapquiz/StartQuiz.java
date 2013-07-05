@@ -73,13 +73,10 @@ public class StartQuiz extends FragmentActivity implements IF_QuizUI{
 	
 	@Override
     public void onBackPressed() {
-		/*
-		 * TODO - Varun Handle the back press. 
-		 * While taking quiz, the user should not leave quiz
-		 * Give a warning if he wants to leave.
-		 */
 		
-		quiz.pause();
+		if(quiz.getStatus() != Quiz.QuizStatus.Completed){
+			quiz.pause();
+		}
 		
 		super.onBackPressed();
 

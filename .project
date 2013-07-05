@@ -34,12 +34,7 @@
 		<link>
 			<name>hq-src</name>
 			<type>2</type>
-			<location>C:/home/varun/Android-Development/Dev-Projects/HQF-Client/src</location>
-		</link>
-		<link>
-			<name>hqf-src</name>
-			<type>2</type>
-			<location>C:/Users/I041474/Documents/Project Works/Android Development/Dev_Projects/HQF-Client/trunk/src</location>
+			<location>/home/varun/Android-Development/Dev-Projects/HQF-Client/src</location>
 		</link>
 	</linkedResources>
 </projectDescription>
