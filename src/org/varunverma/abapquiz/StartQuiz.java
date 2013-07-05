@@ -3,17 +3,20 @@
  */
 package org.varunverma.abapquiz;
 
+import java.util.HashMap;
+import java.util.Iterator;
+
 import org.varunverma.hanuquiz.Quiz;
 import org.varunverma.hanuquiz.QuizManager;
-
-import com.google.ads.AdRequest;
-import com.google.ads.AdView;
 
 import android.app.ActionBar;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
+
+import com.google.ads.AdRequest;
+import com.google.ads.AdView;
 
 /**
  * @author Varun
@@ -25,11 +28,14 @@ public class StartQuiz extends FragmentActivity implements IF_QuizUI{
 	private PagerAdapter pagerAdapter;
 	private int quizId;
 	private Quiz quiz;
+	private HashMap<Integer,QuestionFragment> fragments;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		
 		super.onCreate(savedInstanceState);
+		
+		fragments = new HashMap<Integer,QuestionFragment>();
 		
 		setContentView(R.layout.quiz);
 		
@@ -82,6 +88,11 @@ public class StartQuiz extends FragmentActivity implements IF_QuizUI{
 	@Override
 	public void evaluateQuiz() {
 		
+		Iterator<QuestionFragment> i = fragments.values().iterator();
+		while(i.hasNext()){
+			i.next().saveAnswers();
+		}
+		
 		quiz.evaluateQuiz();
 		
 	}
@@ -102,6 +113,16 @@ public class StartQuiz extends FragmentActivity implements IF_QuizUI{
 		int id = viewPager.getCurrentItem();
 		viewPager.setCurrentItem(id+1, true);
 		
+	}
+
+	@Override
+	public void attachFragment(int pos, QuestionFragment f) {
+		fragments.put(pos, f);
+	}
+
+	@Override
+	public void removeFragment(int pos) {
+		fragments.remove(pos);
 	}
 	
 }
