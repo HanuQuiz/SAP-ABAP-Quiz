@@ -234,7 +234,7 @@ public class Main extends Activity implements Invoker, OnNavigationListener, OnI
 
 	@Override
 	public boolean onNavigationItemSelected(int pos, long id) {
-		/* TODO - Varun to implement
+		/* 
 		 * On click of toolbar spinner item 
 		 */
 		
@@ -248,7 +248,6 @@ public class Main extends Activity implements Invoker, OnNavigationListener, OnI
 	@Override
 	public void onItemClick(AdapterView<?> parent, View view, int pos, long id) {
 		/*
-		 * TODO - Varun to do
 		 * Load Questions for this quiz
 		 * Start new activity
 		 */

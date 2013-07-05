@@ -9,9 +9,11 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.varunverma.hanuquiz.Question;
+import org.varunverma.hanuquiz.Quiz;
 import org.varunverma.hanuquiz.QuizManager;
 
 import android.app.Activity;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -81,7 +83,8 @@ public class QuestionFragment extends Fragment {
 		
 		WebView wv = (WebView) rootView.findViewById(R.id.webview);
 		
-		question = QuizManager.getInstance().getQuizById(quizId).getQuestion(questionId);
+		Quiz quiz = QuizManager.getInstance().getQuizById(quizId);
+		question = quiz.getQuestion(questionId);
 		
 		String html = question.getHTML();
 		
@@ -104,20 +107,23 @@ public class QuestionFragment extends Fragment {
 		}
 		
 		HashMap<Integer,String> options = question.getOptions();
+		String myAnswer = question.getMyAnswer();
+		List<Integer> answers = question.getAnswers();
+		CompoundButton compoundButton;
 		
 		Iterator<Integer> i = options.keySet().iterator();
 		while(i.hasNext()){
 			
 			int optionId = i.next();
 			String optionValue = options.get(optionId);
-			
+				
 			if(question.getChoiceType() == 1){
 				// Single Choice
 				RadioButton rb = new RadioButton(getActivity());
 				rb.setTag(String.valueOf(optionId));
 				rb.setText(optionValue);
 				rg.addView(rb);
-				optionButtonList.add(rb);
+				compoundButton = rb;
 			}
 			else{
 				// Single Choice
@@ -125,7 +131,19 @@ public class QuestionFragment extends Fragment {
 				cb.setTag(String.valueOf(optionId));
 				cb.setText(optionValue);
 				ll.addView(cb);
-				optionButtonList.add(cb);
+				compoundButton = cb;
+			}
+			
+			optionButtonList.add(compoundButton);
+			
+			if(myAnswer.contains(String.valueOf(optionId))){
+				compoundButton.setChecked(true);
+			}
+			
+			if(quiz.getStatus() == Quiz.QuizStatus.Completed){
+				if(answers.contains(optionId)){
+					compoundButton.setTextColor(Color.GREEN);
+				}
 			}
 			
 		}

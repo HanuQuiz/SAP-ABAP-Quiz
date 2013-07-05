@@ -57,8 +57,7 @@ public class QuizListAdapter extends ArrayAdapter<Quiz> {
 			quizIcon.setImageResource(R.drawable.pause);
 		}
 		else{
-			// TODO - Remove after testing. No icon as of now.
-			quizIcon.setImageResource(R.drawable.completed);
+			quizIcon.setImageResource(R.drawable.new_quiz);
 		}
 		
 		TextView title = (TextView) rowView.findViewById(R.id.title);
@@ -74,7 +73,7 @@ public class QuizListAdapter extends ArrayAdapter<Quiz> {
 			String quizScore = quiz.getScore() + "/" + quiz.getCount();
 			score.setText(quizScore);
 			
-			int perct = quiz.getScore() / quiz.getCount();
+			float perct = 100 * quiz.getScore() / quiz.getCount();
 			if(perct >= 7){
 				score.setTextColor(Color.GREEN);
 			}
@@ -87,8 +86,7 @@ public class QuizListAdapter extends ArrayAdapter<Quiz> {
 			
 		}
 		else{
-			//TODO - Remove after testing
-			score.setText("10/10");
+			score.setText("");
 		}
 		
 		return rowView;
