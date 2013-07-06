@@ -148,7 +148,15 @@ public class QuizList extends Activity implements OnNavigationListener, OnItemCl
 		 * On click of toolbar spinner item 
 		 */
 		
-		if(pos == 2){
+		if(pos == 2 && !Constants.isPremiumVersion()){
+			/* 
+			 * This is not a premium version 
+			 * and user has selected to see the Difficult Quiz !
+			 * How dare he. He must buy
+			 */
+			
+			Intent buy = new Intent(QuizList.this, ActivatePremiumFeatures.class);
+			QuizList.this.startActivity(buy);
 			
 		}
 		

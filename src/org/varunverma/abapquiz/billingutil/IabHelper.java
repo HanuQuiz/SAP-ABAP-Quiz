@@ -145,7 +145,25 @@ public class IabHelper {
     // some fields on the getSkuDetails response bundle
     public static final String GET_SKU_DETAILS_ITEM_LIST = "ITEM_ID_LIST";
     public static final String GET_SKU_DETAILS_ITEM_TYPE_LIST = "ITEM_TYPE_LIST";
-
+    
+    private static IabHelper instance;
+    
+    public static IabHelper getInstance(){
+    	return instance;
+    }
+    
+    public static IabHelper getInstance(Context ctx, String base64PublicKey){
+    	
+    	if(instance == null){
+    		
+    		instance = new IabHelper(ctx, base64PublicKey);
+    		
+    	}
+    	
+    	return instance;
+    	
+    }
+    
     /**
      * Creates an instance. After creation, it will not yet be ready to use. You must perform
      * setup by calling {@link #startSetup} and wait for setup to complete. This constructor does not
@@ -157,7 +175,7 @@ public class IabHelper {
      *     public key in your application's page on Google Play Developer Console. Note that this
      *     is NOT your "developer public key".
      */
-    public IabHelper(Context ctx, String base64PublicKey) {
+    private IabHelper(Context ctx, String base64PublicKey) {
         mContext = ctx.getApplicationContext();
         mSignatureBase64 = base64PublicKey;
         logDebug("IAB helper created.");

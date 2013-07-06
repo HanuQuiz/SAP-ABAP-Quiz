@@ -16,6 +16,7 @@
     <string name="quiz_result">10/10</string>
     <string name="ok">OK</string>
     <string name="reset">Reset</string>
+    <string name="cancel">Cancel</string>
     
     <string-array name="DifficultyLevel">
         <item >Easy</item>
