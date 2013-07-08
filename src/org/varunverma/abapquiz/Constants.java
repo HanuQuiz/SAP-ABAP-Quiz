@@ -13,13 +13,20 @@ public class Constants {
 	private static String productTitle, productDescription, productPrice;
 	
 	static String getPublicKey() {
-		// TODO - Varun to set the public key
-		return "";
+		return "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCA" +
+				"QEAqr69gdA86Ni+C1pV/8fp0JsYpVxEV4U/CLuD2" +
+				"vs1R1CvYbhgxjMOIJErRi4wlEjum2DMzLP+y804D" +
+				"70m7zLt3oli1CudhDULPM8r+gCpMbbGqNlsdCWVe" +
+				"eroBYhCjJqzWxw6FEMe4r7FhBgPYsuFodoQsBV/C" +
+				"YFDU7wACdT9Yov/9Rz7bibdcWQg/HVJcEz8FF6mr" +
+				"IQ8l5zWLFGvAHi3EA/fT7tucNqSkZjH1QdLh5G1f" +
+				"QPN0d8dyzXstFsuvRwtlc7WweJ26uXWwKfIvPAjC" +
+				"6v1ddiI+sYRhLnJWo4PSExIav2awP0K6flEB79hm" +
+				"3xPJYSVBob6NRoB/N1px//UawIDAQAB";
 	}
 
 	static String getProductKey() {
-		// TODO - Varun to set the product Key
-		return "";
+		return "premium_content";
 	}
 
 	static void setPremiumVersion(boolean premiumVersion) {

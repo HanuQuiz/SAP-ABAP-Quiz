@@ -28,17 +28,13 @@ public class Main extends Activity implements Invoker,
 	private Application app;
 	private IabHelper billingHelper;
 	
-	private boolean appInitialized, billingInitialized;
-
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		
 		super.onCreate(savedInstanceState);
 		
 		setContentView(R.layout.main);
-		
-		appInitialized = billingInitialized = false;
-		
+			
 		// Create application instance.
 		app = Application.getApplicationInstance();
 		
@@ -89,15 +85,20 @@ public class Main extends Activity implements Invoker,
 		
 		// Set up
 		billingHelper.startSetup(this);
+
+	}
+	
+	private void initializeApp(){
 		
 		// Initialize app...
 		if (app.isThisFirstUse()) {
 			// This is the first run !
 			app.initializeAppForFirstUse(this);
-			
+
 		} else {
 			app.initialize(this);
 		}
+		
 	}
 
 	@Override
@@ -127,11 +128,7 @@ public class Main extends Activity implements Invoker,
 			}
 		}
 		
-		appInitialized = true;
-		
-		if(billingInitialized){
-			startApp();
-		}		
+		startApp();
 		
 	}
 
@@ -159,10 +156,10 @@ public class Main extends Activity implements Invoker,
 			// Log error ! Now I don't know what to do
 			Log.w(Application.TAG, result.getMessage());
 			
-			billingInitialized = true;
-			if(appInitialized){
-				startApp();
-			}
+			app.setSyncCategory("Free");
+			
+			// Initialize the app
+			initializeApp();
 			
 			
 		} else {
@@ -185,6 +182,8 @@ public class Main extends Activity implements Invoker,
 			// Log error ! Now I don't know what to do
 			Log.w(Application.TAG, result.getMessage());
 			
+			app.setSyncCategory("Free");
+			
 		} else {
 			
 			String productKey = Constants.getProductKey();
@@ -194,6 +193,16 @@ public class Main extends Activity implements Invoker,
 			if (item != null) {
 				// Has user purchased this premium service ???
 				Constants.setPremiumVersion(inv.hasPurchase(productKey));
+				
+				if(Constants.isPremiumVersion()){
+					app.setSyncCategory("Premium");
+				}
+				else{
+					app.setSyncCategory("Free");
+				}
+			}
+			else{
+				app.setSyncCategory("Free");
 			}
 			
 			Constants.setProductTitle(inv.getSkuDetails(productKey).getTitle());
@@ -201,10 +210,8 @@ public class Main extends Activity implements Invoker,
 			Constants.setProductPrice(inv.getSkuDetails(productKey).getPrice());
 		}
 		
-		billingInitialized = true;
-		if(appInitialized){
-			startApp();
-		}
+		// Initialize the app
+		initializeApp();
 		
 	}
 

@@ -70,6 +70,7 @@ public class ActivatePremiumFeatures extends Activity implements
 		
 		String help = "By purchasing this product, you will have access to " +
 				"unlimitied number of Quizzes of all levels.\n" +
+				"This will also remove all advertisements from the app.\n" +
 				"This is a one time purchase only.";
 		
 		prodHelp.setText(help);
