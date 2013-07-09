@@ -21,12 +21,14 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.widget.TextView;
 
 public class Main extends Activity implements Invoker,
 		OnIabSetupFinishedListener, QueryInventoryFinishedListener {
 
 	private Application app;
 	private IabHelper billingHelper;
+	private TextView statusView;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +36,8 @@ public class Main extends Activity implements Invoker,
 		super.onCreate(savedInstanceState);
 		
 		setContentView(R.layout.main);
+		
+		statusView = (TextView) findViewById(R.id.status);
 			
 		// Create application instance.
 		app = Application.getApplicationInstance();
@@ -88,14 +92,31 @@ public class Main extends Activity implements Invoker,
 
 	}
 	
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		
+		switch (requestCode) {
+
+		case Application.EULA:
+			if (!app.isEULAAccepted()) {
+				finish();
+			} else {
+				// Start Main Activity
+				startMainActivity();
+			}
+			break;
+		}
+	}
+	
 	private void initializeApp(){
 		
 		// Initialize app...
 		if (app.isThisFirstUse()) {
 			// This is the first run !
+			statusView.setText("Initializing app for first use.\nPlease wait, this may take a while");
 			app.initializeAppForFirstUse(this);
 
 		} else {
+			statusView.setText("Initializing application...");
 			app.initialize(this);
 		}
 		

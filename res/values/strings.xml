@@ -3,6 +3,7 @@
 	
     <!--  Application Info -->
     <string name="app_name">SAP ABAP Quiz</string>
+    <string name="hanu_quiz">Powered by: Hanu-Quiz</string>
     <string name="AppURL">http://hanu-quiz.varunverma.org/Applications/AQ</string>
     
     <!-- Menu Items -->
