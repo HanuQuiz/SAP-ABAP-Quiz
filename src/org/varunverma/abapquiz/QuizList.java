@@ -178,8 +178,21 @@ public class QuizList extends Activity implements OnNavigationListener, OnItemCl
 		
 		Intent startQuiz = new Intent(QuizList.this, StartQuiz.class);
 		startQuiz.putExtra("QuizId", quiz.getQuizId());
-		startActivity(startQuiz);
+		startActivityForResult(startQuiz,999);
 		
+	}
+	
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+		switch (requestCode) {
+
+		case 999:
+			
+			if(data.getBooleanExtra("RestartApp", true)){
+				finish();
+			}
+			break;
+		}
 	}
 
 }

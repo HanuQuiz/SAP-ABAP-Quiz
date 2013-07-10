@@ -10,6 +10,8 @@ import org.varunverma.abapquiz.billingutil.Purchase;
 import org.varunverma.hanuquiz.Application;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -114,14 +116,61 @@ public class ActivatePremiumFeatures extends Activity implements
 	public void onIabPurchaseFinished(IabResult result, Purchase info) {
 		
 		if (result.isFailure()) {
-			Log.d(Application.TAG, "Error purchasing: " + result);
+			
+			String message = "Error purchasing: " + result.getMessage();
+			
+			Log.d(Application.TAG, message);
+			
+			showAlertDialog(message, false);
 			return;
 		}
 		
 		if(info.getSku().contentEquals(Constants.getProductKey())){
 			// Purchase was success
 			Constants.setPremiumVersion(true);
+			
+			// Purchase done. So we must re-sync all to get the Difficult level questions
+			Application.getApplicationInstance().addParameter("LastQuestionsSyncTime", "1349328720");
+			Application.getApplicationInstance().addParameter("LastQuizSyncTime", "1349328720");
+			
+			String message = "Congratulations. You have access to premium content.\n" +
+					"Please restart the app to see the premium content";
+			
+			showAlertDialog(message, true);
 		}
+		
+	}
+
+	private void showAlertDialog(String message, final boolean restartApp) {
+		
+		// Show alert dialog
+		new AlertDialog.Builder(this)
+			.setTitle("Purchase Status:")
+			.setMessage(message)
+			.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+				
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					
+					// Dismiss the dialog
+					dialog.dismiss();
+					finishActivity(restartApp);
+					
+				}
+			})
+			.show();
+		
+	}
+	
+	private void finishActivity(boolean restartApp) {
+		
+		Intent returnData = new Intent();
+		returnData.putExtra("RestartApp", restartApp);
+		
+		setResult(RESULT_OK, returnData);
+		
+		// Close this activity
+		finish();
 		
 	}
 }
