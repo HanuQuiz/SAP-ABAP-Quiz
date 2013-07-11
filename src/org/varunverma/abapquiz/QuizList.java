@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import org.varunverma.abapquiz.billingutil.IabHelper;
 import org.varunverma.hanuquiz.Application;
 import org.varunverma.hanuquiz.Quiz;
 
@@ -138,7 +139,14 @@ public class QuizList extends Activity implements OnNavigationListener, OnItemCl
 	
 	@Override
 	protected void onDestroy(){
+		
+		// Close billing helper
+		IabHelper.getInstance().dispose();
+
+		// Close app
 		app.close();
+		
+		// Super destroy.
 		super.onDestroy();
 	}
 
@@ -156,7 +164,7 @@ public class QuizList extends Activity implements OnNavigationListener, OnItemCl
 			 */
 			
 			Intent buy = new Intent(QuizList.this, ActivatePremiumFeatures.class);
-			QuizList.this.startActivity(buy);
+			QuizList.this.startActivityForResult(buy,999);
 			
 		}
 		
@@ -178,7 +186,7 @@ public class QuizList extends Activity implements OnNavigationListener, OnItemCl
 		
 		Intent startQuiz = new Intent(QuizList.this, StartQuiz.class);
 		startQuiz.putExtra("QuizId", quiz.getQuizId());
-		startActivityForResult(startQuiz,999);
+		startActivity(startQuiz);
 		
 	}
 	

@@ -235,5 +235,14 @@ public class Main extends Activity implements Invoker,
 		initializeApp();
 		
 	}
+	
+	@Override
+	protected void onDestroy(){
+		
+		if(Constants.isPremiumVersion()){
+			billingHelper.dispose();
+		}
+		super.onDestroy();
+	}
 
 }
