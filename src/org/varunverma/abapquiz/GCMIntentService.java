@@ -1,5 +1,8 @@
 package org.varunverma.abapquiz;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+
 import org.varunverma.CommandExecuter.ResultObject;
 import org.varunverma.hanuquiz.HanuGCMIntentService;
 
@@ -70,9 +73,52 @@ public class GCMIntentService extends HanuGCMIntentService {
 
 	private void createNotification(ResultObject result) {
 		
-		/*
-		 * TODO - Varun
-		 */
+		ArrayList<String> quizDescList = result.getData().getStringArrayList("QuizDesc");
+		
+		NotificationManager nm = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+		
+		String title;
+
+		int quizzesDownloaded = result.getData().getInt("QuizzesDownloaded");
+		if (quizzesDownloaded == 0) {
+			title = "New quizzes downloaded.";
+		} else {
+			title = quizzesDownloaded + " new quizzes have been downloaded";
+		}
+
+		Intent notificationIntent = new Intent(this, Main.class);
+		PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, notificationIntent, 0);
+
+		NotificationCompat.Builder notifBuilder = new NotificationCompat.Builder(this)
+														.setContentTitle(title)
+														.setContentInfo(String.valueOf(quizzesDownloaded))
+														.setSmallIcon(R.drawable.ic_launcher)
+														.setContentIntent(pendingIntent);
+
+		NotificationCompat.InboxStyle inboxStyle = new NotificationCompat.InboxStyle();
+
+		inboxStyle.setBigContentTitle(title);
+		inboxStyle.setSummaryText("New quizzes downloaded");
+
+		// Add joke titles
+		Iterator<String> i = quizDescList.listIterator();
+		while (i.hasNext()) {
+			inboxStyle.addLine(i.next());
+		}
+
+		// Moves the big view style object into the notification object.
+		notifBuilder.setStyle(inboxStyle);
+
+		Notification notification = notifBuilder.build();
+		notification.icon = R.drawable.ic_launcher;
+		notification.tickerText = title;
+		notification.when = System.currentTimeMillis();
+
+		notification.flags |= Notification.FLAG_AUTO_CANCEL;
+		notification.defaults |= Notification.DEFAULT_SOUND;
+		notification.defaults |= Notification.DEFAULT_VIBRATE;
+
+		nm.notify(1, notification);
 
 	}
 }

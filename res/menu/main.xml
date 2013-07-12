@@ -13,12 +13,5 @@
         android:showAsAction="ifRoom"
         android:icon="@drawable/about"
         android:title="@string/action_about"/>
-    
-    <item
-        android:id="@+id/settings"
-        android:orderInCategory="100"
-        android:showAsAction="ifRoom"
-        android:icon="@drawable/settings"
-        android:title="@string/action_settings"/>
 
 </menu>

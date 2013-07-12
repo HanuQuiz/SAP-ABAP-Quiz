@@ -78,13 +78,17 @@ public class QuizList extends Activity implements OnNavigationListener, OnItemCl
 	private void showUI() {
 		
 		// Show Ad.
-		AdRequest adRequest = new AdRequest();
-		adRequest.addTestDevice(AdRequest.TEST_EMULATOR);
-		adRequest.addTestDevice("E16F3DE5DF824FE222EDDA27A63E2F8A");	// My S2 Mobile
-		//TODO - Pramodh to find his mobile guid and add it here.
-		AdView adView = (AdView) findViewById(R.id.adView);
-		
-		adView.loadAd(adRequest);
+		if(!Constants.isPremiumVersion()){
+			
+			AdRequest adRequest = new AdRequest();
+			adRequest.addTestDevice(AdRequest.TEST_EMULATOR);
+			adRequest.addTestDevice("E16F3DE5DF824FE222EDDA27A63E2F8A");	// My S2 Mobile
+			//TODO - Pramodh to find his mobile guid and add it here.
+			AdView adView = (AdView) findViewById(R.id.adView);
+			
+			adView.loadAd(adRequest);
+			
+		}
 		
 		// Set the action bar items
 		 ArrayAdapter<CharSequence> ABAdapter = ArrayAdapter.createFromResource(this, R.array.DifficultyLevel, android.R.layout.simple_spinner_item);
@@ -126,9 +130,6 @@ public class QuizList extends Activity implements OnNavigationListener, OnItemCl
 			info.putExtra("File", "about.html");
 			info.putExtra("Title", "About: ");
 			QuizList.this.startActivity(info);
-			return true;
-			
-		case R.id.settings:
 			return true;
 			
 		default:

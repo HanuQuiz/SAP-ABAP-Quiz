@@ -45,13 +45,17 @@ public class StartQuiz extends FragmentActivity implements IF_QuizUI{
 		}
 		
 		// Show Ad.
-		AdRequest adRequest = new AdRequest();
-		adRequest.addTestDevice(AdRequest.TEST_EMULATOR);
-		adRequest.addTestDevice("E16F3DE5DF824FE222EDDA27A63E2F8A"); // My S2 Mobile
-		// TODO - Pramodh to find his mobile guid and add it here.
-		AdView adView = (AdView) findViewById(R.id.adView);
+		if (!Constants.isPremiumVersion()) {
 
-		adView.loadAd(adRequest);
+			AdRequest adRequest = new AdRequest();
+			adRequest.addTestDevice(AdRequest.TEST_EMULATOR);
+			adRequest.addTestDevice("E16F3DE5DF824FE222EDDA27A63E2F8A"); // My S2 mobile
+			// TODO - Pramodh to find his mobile guid and add it here.
+			AdView adView = (AdView) findViewById(R.id.adView);
+
+			adView.loadAd(adRequest);
+
+		}
 		
 		viewPager = (ViewPager) findViewById(R.id.pager);
 		
