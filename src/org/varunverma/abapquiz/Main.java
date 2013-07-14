@@ -29,6 +29,7 @@ public class Main extends Activity implements Invoker,
 	private Application app;
 	private IabHelper billingHelper;
 	private TextView statusView;
+	private boolean appStarted = false;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -151,21 +152,38 @@ public class Main extends Activity implements Invoker,
 		
 		startApp();
 		
+		// Kill this activity.
+		Log.i(Application.TAG, "Kill Main Activity");
+		Main.this.finish();
+		
 	}
 
 	private void startApp() {
+		
+		if(appStarted){
+			return;
+		}
+		
+		appStarted = true;
+		
 		// Start the Quiz List
 		Log.i(Application.TAG, "Start Quiz List");
 		Intent start = new Intent(Main.this, QuizList.class);
 		Main.this.startActivity(start);
 
-		// Kill this activity.
-		Log.i(Application.TAG, "Kill Main Activity");
-		Main.this.finish();
 	}
 
 	@Override
 	public void ProgressUpdate(ProgressInfo progress) {
+		
+		String message = progress.getProgressMessage();
+		if(message != null && !message.contentEquals("")){
+			
+			if(message.contentEquals("Show UI")){
+				startApp();
+			}
+			
+		}
 		
 	}
 

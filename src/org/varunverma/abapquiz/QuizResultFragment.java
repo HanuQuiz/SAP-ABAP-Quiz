@@ -7,6 +7,7 @@ import org.varunverma.hanuquiz.Quiz;
 import org.varunverma.hanuquiz.QuizManager;
 
 import android.app.Activity;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -92,6 +93,17 @@ public class QuizResultFragment extends Fragment {
 		
 		String myScore = String.valueOf(score) + " / " + String.valueOf(count);
 		quizResultView.setText(myScore);
+		
+		float perct = 100 * score / count;
+		if(perct >= 70){
+			quizResultView.setTextColor(Color.GREEN);
+		}
+		else if(perct < 50){
+			quizResultView.setTextColor(Color.RED);
+		}
+		else{
+			quizResultView.setTextColor(Color.MAGENTA);
+		}
 		
 	}
 

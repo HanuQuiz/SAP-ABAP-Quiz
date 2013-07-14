@@ -21,9 +21,9 @@
     <string name="loading">Loading....</string>
     
     <string-array name="DifficultyLevel">
-        <item >Easy</item>
-        <item >Medium</item>
-        <item >Difficult</item>
+        <item >Beginner</item>
+        <item >Advanced</item>
+        <item >Expert</item>
     </string-array>
 
 </resources>
