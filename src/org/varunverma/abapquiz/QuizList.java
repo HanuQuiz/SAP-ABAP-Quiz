@@ -81,7 +81,8 @@ public class QuizList extends Activity implements OnNavigationListener, OnItemCl
 		AdRequest adRequest = new AdRequest();
 		adRequest.addTestDevice(AdRequest.TEST_EMULATOR);
 		adRequest.addTestDevice("E16F3DE5DF824FE222EDDA27A63E2F8A");	// My S2 Mobile
-		//TODO - Pramodh to find his mobile guid and add it here.
+		adRequest.addTestDevice("06FE63303C3DA13C859515930A396C91");	// My LG LTE Mobile
+		
 		AdView adView = (AdView) findViewById(R.id.adView);
 		
 		adView.loadAd(adRequest);
