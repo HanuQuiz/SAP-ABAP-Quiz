@@ -23,6 +23,8 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.widget.TextView;
 
+import com.google.analytics.tracking.android.EasyTracker;
+
 public class Main extends Activity implements Invoker,
 		OnIabSetupFinishedListener, QueryInventoryFinishedListener {
 
@@ -46,27 +48,21 @@ public class Main extends Activity implements Invoker,
 		// Set application context.
 		app.setContext(this);
 		
-	}
-	
-	@Override
-	protected void onStart() {
-		
-		super.onStart();
-		
-		// Accept my Terms
-		app.setEULAResult(true);	//TODO Remove in production version
-        if(!app.isEULAAccepted()){
-        	// Show EULA.
-        	Intent eula = new Intent(Main.this, DisplayFile.class);
-        	eula.putExtra("File", "eula.html");
-			eula.putExtra("Title", "End User License Aggrement: ");
-			Main.this.startActivityForResult(eula, Application.EULA);
-        }
-        else{
-        	// Start the Main Activity
-       		startMainActivity();
-        }
+		// Tracking.
+        EasyTracker.getInstance().activityStart(this);
         
+		// Accept my Terms
+		if (!app.isEULAAccepted()) {
+			
+			// Show EULA.
+			Intent eula = new Intent(Main.this, Eula.class);
+			Main.this.startActivityForResult(eula, Application.EULA);
+			
+		} else {
+			// Start the Main Activity
+			startMainActivity();
+		}
+		
 	}
 	
 	@Override
@@ -83,7 +79,7 @@ public class Main extends Activity implements Invoker,
 	private void startMainActivity() {
 		
 		// Register application.
-        //app.registerAppForGCM();
+        app.registerAppForGCM();
 		
 		// Instantiate billing helper class
 		billingHelper = IabHelper.getInstance(this, Constants.getPublicKey());
@@ -252,6 +248,13 @@ public class Main extends Activity implements Invoker,
 		// Initialize the app
 		initializeApp();
 		
+	}
+	
+	@Override
+	public void onStop() {
+		super.onStop();
+		// The rest of your onStop() code.
+		EasyTracker.getInstance().activityStop(this);
 	}
 	
 	@Override

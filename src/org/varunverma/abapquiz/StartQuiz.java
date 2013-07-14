@@ -14,9 +14,11 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.view.MenuItem;
 
 import com.google.ads.AdRequest;
 import com.google.ads.AdView;
+import com.google.analytics.tracking.android.EasyTracker;
 
 /**
  * @author Varun
@@ -65,6 +67,11 @@ public class StartQuiz extends FragmentActivity implements IF_QuizUI{
 		quiz = QuizManager.getInstance().getQuizById(quizId);
 		ActionBar actionBar = getActionBar();
 		actionBar.setTitle(quiz.getDescription());
+		actionBar.setDisplayHomeAsUpEnabled(true);
+		
+		// Tracking.
+        EasyTracker.getInstance().activityStart(this);
+        EasyTracker.getTracker().trackView("/Quiz/" + quiz.getDescription());
 		
 	}
 	
@@ -73,6 +80,28 @@ public class StartQuiz extends FragmentActivity implements IF_QuizUI{
 		
 		super.onStart();
 			
+	}
+	
+	@Override
+	public void onStop() {
+		super.onStop();
+		// The rest of your onStop() code.
+		EasyTracker.getInstance().activityStop(this);
+	}
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		
+		switch (item.getItemId()) {
+		
+			case android.R.id.home:
+				finish();
+				return true;
+				
+			default:
+	            return false;
+		}
+		
 	}
 	
 	@Override

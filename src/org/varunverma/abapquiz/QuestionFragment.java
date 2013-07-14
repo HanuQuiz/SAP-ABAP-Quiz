@@ -82,6 +82,7 @@ public class QuestionFragment extends Fragment {
                 .inflate(R.layout.question, container, false);
 		
 		WebView wv = (WebView) rootView.findViewById(R.id.webview);
+		wv.setBackgroundColor(Color.TRANSPARENT);
 		
 		Quiz quiz = QuizManager.getInstance().getQuizById(quizId);
 		question = quiz.getQuestion(questionId);
@@ -133,7 +134,7 @@ public class QuestionFragment extends Fragment {
 				ll.addView(cb);
 				compoundButton = cb;
 			}
-			
+				
 			optionButtonList.add(compoundButton);
 			
 			if(myAnswer.contains(String.valueOf(optionId))){

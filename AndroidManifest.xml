@@ -27,6 +27,7 @@
         
         <activity
             android:name="org.varunverma.abapquiz.Main"
+            android:screenOrientation="portrait"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -35,8 +36,19 @@
         </activity>
         
         <activity
+            android:name=".Eula"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:label="@string/app_name" >
+            <intent-filter>
+                <action android:name="android.intent.action.EULA" />
+            </intent-filter>
+        </activity>
+        
+        <activity
             android:name=".QuizList"
             android:exported="false"
+            android:screenOrientation="portrait"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.QUIZ_LIST" />
@@ -46,6 +58,7 @@
         <activity
             android:name=".StartQuiz"
             android:exported="false"
+            android:screenOrientation="portrait"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.QUIZ" />
@@ -55,6 +68,7 @@
         <activity
             android:name=".ActivatePremiumFeatures"
             android:exported="false"
+            android:screenOrientation="portrait"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.PREMIUM_FEATURES" />
@@ -64,12 +78,23 @@
         <activity
             android:name=".DisplayFile"
             android:configChanges="orientation|keyboardHidden"
+            android:screenOrientation="portrait"
             android:exported="false"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.WEB_VIEW" />
             </intent-filter>
         </activity>
+        
+        <receiver android:name="com.google.android.gcm.GCMBroadcastReceiver" android:permission="com.google.android.c2dm.permission.SEND" >
+  			<intent-filter>
+    			<action android:name="com.google.android.c2dm.intent.RECEIVE" />
+    			<action android:name="com.google.android.c2dm.intent.REGISTRATION" />
+    			<category android:name="org.varunverma.abapquiz" />
+  			</intent-filter>
+		</receiver>
+        
+        <service android:name=".GCMIntentService" />
         
         <activity
             android:name="com.google.ads.AdActivity"

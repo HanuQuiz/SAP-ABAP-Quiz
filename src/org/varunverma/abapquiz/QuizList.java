@@ -23,6 +23,7 @@ import android.widget.ListView;
 
 import com.google.ads.AdRequest;
 import com.google.ads.AdView;
+import com.google.analytics.tracking.android.EasyTracker;
 
 public class QuizList extends Activity implements OnNavigationListener, OnItemClickListener {
 	
@@ -52,29 +53,24 @@ public class QuizList extends Activity implements OnNavigationListener, OnItemCl
 		actionBar = getActionBar();
 		actionBar.setDisplayShowTitleEnabled(false);
 		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
+		
+		// Tracking.
+        EasyTracker.getInstance().activityStart(this);
+
+		// Start the UI
+		showUI();
+
 	}
 	
 	@Override
-	protected void onStart() {
+	public void onStop() {
 		
-		super.onStart();
+		super.onStop();
 		
-		// Accept my Terms
-		app.setEULAResult(true);	//TODO Remove in production version
-        if(!app.isEULAAccepted()){
-        	// Show EULA.
-        	Intent eula = new Intent(QuizList.this, DisplayFile.class);
-        	eula.putExtra("File", "eula.html");
-			eula.putExtra("Title", "End User License Aggrement: ");
-			QuizList.this.startActivityForResult(eula, Application.EULA);
-        }
-        else{
-        	// Start the UI
-        	showUI();
-        }
-        
+		// The rest of your onStop() code.
+		EasyTracker.getInstance().activityStop(this);
 	}
-
+	
 	private void showUI() {
 		
 		// Show Ad.
@@ -197,7 +193,7 @@ public class QuizList extends Activity implements OnNavigationListener, OnItemCl
 
 		case 999:
 			
-			if(data.getBooleanExtra("RestartApp", true)){
+			if(data.getBooleanExtra("RestartApp", false)){
 				finish();
 			}
 			break;

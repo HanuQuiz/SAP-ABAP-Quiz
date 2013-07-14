@@ -9,12 +9,14 @@ import org.varunverma.abapquiz.billingutil.IabResult;
 import org.varunverma.abapquiz.billingutil.Purchase;
 import org.varunverma.hanuquiz.Application;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -47,6 +49,9 @@ public class ActivatePremiumFeatures extends Activity implements
 		cancel = (Button) findViewById(R.id.cancel);
 		cancel.setOnClickListener(this);
 		
+		ActionBar actionBar = getActionBar();
+		actionBar.setDisplayHomeAsUpEnabled(true);
+		
 	}
 	
 	@Override
@@ -65,6 +70,21 @@ public class ActivatePremiumFeatures extends Activity implements
 		buy.setText(Constants.getProductPrice());
 		
 		showProductHelp();
+		
+	}
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		
+		switch (item.getItemId()) {
+		
+			case android.R.id.home:
+				finish();
+				return true;
+				
+			default:
+	            return false;
+		}
 		
 	}
 	
@@ -88,6 +108,7 @@ public class ActivatePremiumFeatures extends Activity implements
 			break;
 
 		case R.id.cancel:
+			setResult(RESULT_OK, new Intent());
 			finish();
 			break;
 		}
