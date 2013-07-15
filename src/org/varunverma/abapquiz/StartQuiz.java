@@ -71,7 +71,7 @@ public class StartQuiz extends FragmentActivity implements IF_QuizUI{
 		
 		// Tracking.
         EasyTracker.getInstance().activityStart(this);
-        EasyTracker.getTracker().trackView("/Quiz/" + quiz.getDescription());
+        EasyTracker.getTracker().sendView("/Quiz/" + quiz.getDescription());
 		
 	}
 	

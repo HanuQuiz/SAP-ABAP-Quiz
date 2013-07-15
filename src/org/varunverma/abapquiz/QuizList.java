@@ -2,6 +2,7 @@ package org.varunverma.abapquiz;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 
 import org.varunverma.abapquiz.billingutil.IabHelper;
@@ -32,6 +33,7 @@ public class QuizList extends Activity implements OnNavigationListener, OnItemCl
 	private ListView listView;
 	private QuizListAdapter adapter;
 	private List<Quiz> quizList;
+	private int level;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -93,13 +95,39 @@ public class QuizList extends Activity implements OnNavigationListener, OnItemCl
 	     actionBar.setListNavigationCallbacks(ABAdapter, this);
 	     
 	     quizList = new ArrayList<Quiz>();
-	     quizList.addAll(app.getQuizListByLevel(1));	// 1 => Easy
-	     Collections.sort(quizList, Quiz.SortByID);
+	     level = 1;
+	     loadQuizByLevel();
 	     
 	     // Adapter for the Quiz List
 	     adapter = new QuizListAdapter(this, R.layout.quiz_list_row, quizList);
 	     listView.setAdapter(adapter);
 	     
+	}
+
+	private void loadQuizByLevel() {
+		
+		quizList.clear();
+		quizList.addAll(app.getQuizListByLevel(level));	// 1 => Easy
+		
+		// Remove the premium content if any
+		if(!Constants.isPremiumVersion()){
+			
+			Iterator<Quiz> iterator = quizList.iterator();
+			while(iterator.hasNext()){
+				
+				if(iterator.next().getSyncTags().contains("Free")){
+					// Nothing to do
+				}
+				else{
+					iterator.remove();
+				}
+				
+			}
+			
+		}
+		
+	    Collections.sort(quizList, Quiz.SortByID);
+		
 	}
 
 	@Override
@@ -165,9 +193,9 @@ public class QuizList extends Activity implements OnNavigationListener, OnItemCl
 			
 		}
 		
-		quizList.clear();
-		quizList.addAll(app.getQuizListByLevel(pos + 1));	// 1 => Easy, 2 => Medium, 3 => Difficult
-		Collections.sort(quizList, Quiz.SortByID);
+		level = pos + 1;
+		loadQuizByLevel();
+		
 		adapter.notifyDataSetChanged();
 		return true;
 	}
@@ -183,7 +211,7 @@ public class QuizList extends Activity implements OnNavigationListener, OnItemCl
 		
 		Intent startQuiz = new Intent(QuizList.this, StartQuiz.class);
 		startQuiz.putExtra("QuizId", quiz.getQuizId());
-		startActivity(startQuiz);
+		startActivityForResult(startQuiz,998);
 		
 	}
 	
@@ -196,6 +224,17 @@ public class QuizList extends Activity implements OnNavigationListener, OnItemCl
 			if(data.getBooleanExtra("RestartApp", false)){
 				finish();
 			}
+			else{
+				level = 1;
+				loadQuizByLevel();
+				adapter.notifyDataSetChanged();
+			}
+			break;
+			
+		case 998:
+			// Reload the quiz list to update the UI
+			loadQuizByLevel();
+			adapter.notifyDataSetChanged();
 			break;
 		}
 	}
