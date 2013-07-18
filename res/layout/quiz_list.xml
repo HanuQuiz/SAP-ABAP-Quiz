@@ -11,7 +11,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         ads:adSize="BANNER"
-        ads:adUnitId="a1506bd5e27e640" >
+        ads:adUnitId="a151e271b7f28bd" >
     </com.google.ads.AdView>
 
     <ListView

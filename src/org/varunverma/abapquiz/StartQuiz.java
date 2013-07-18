@@ -123,7 +123,7 @@ public class StartQuiz extends FragmentActivity implements IF_QuizUI{
 			i.next().saveAnswers();
 		}
 		
-		quiz.evaluateQuiz();
+		quiz.evaluateQuiz();	
 		
 	}
 

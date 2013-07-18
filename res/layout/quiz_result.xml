@@ -8,15 +8,6 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin" >
 
-    <com.google.ads.AdView
-        android:id="@+id/adView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        ads:adSize="BANNER"
-        ads:adUnitId="a151e271b7f28bd" >
-    </com.google.ads.AdView>
-
     <Button
         android:id="@+id/evaluate_quiz"
         android:layout_width="200dp"
