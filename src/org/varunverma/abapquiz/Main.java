@@ -18,6 +18,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -32,6 +33,8 @@ public class Main extends Activity implements Invoker,
 	private IabHelper billingHelper;
 	private TextView statusView;
 	private boolean appStarted = false;
+	private boolean firstUse = false;
+	private boolean wait = false;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -101,6 +104,16 @@ public class Main extends Activity implements Invoker,
 				startMainActivity();
 			}
 			break;
+			
+		case 900:
+			
+			startApp();
+			
+			// Kill this activity.
+			Log.i(Application.TAG, "Kill Main Activity");
+			Main.this.finish();
+			
+			break;
 		}
 	}
 	
@@ -109,12 +122,37 @@ public class Main extends Activity implements Invoker,
 		// Initialize app...
 		if (app.isThisFirstUse()) {
 			// This is the first run !
+			
+			firstUse = true;
+			wait = true;
+			
 			statusView.setText("Initializing app for first use.\nPlease wait, this may take a while");
-			app.initializeAppForFirstUse(this);
+			app.initializeAppForFirstUse(this);		
 
 		} else {
+			
+			// Regular use. Initialize App
 			statusView.setText("Initializing application...");
 			app.initialize(this);
+			
+			// Check if this is upgrade
+			int oldFrameworkVersion = app.getOldFrameworkVersion();
+			int newFrameworkVersion = app.getNewFrameworkVersion();
+			
+			int oldAppVersion = app.getOldAppVersion();
+			int newAppVersion;
+			try {
+				newAppVersion = getPackageManager().getPackageInfo(getPackageName(), 0).versionCode;
+			} catch (NameNotFoundException e) {
+				newAppVersion = 0;
+				Log.e(Application.TAG, e.getMessage(), e);
+			}
+			
+			if(newAppVersion > oldAppVersion ||	newFrameworkVersion > oldFrameworkVersion){
+				
+				app.updateVersion();
+				wait = true;
+			}
 		}
 		
 	}
@@ -146,12 +184,42 @@ public class Main extends Activity implements Invoker,
 			}
 		}
 		
-		startApp();
+		if(!wait){
+			
+			startApp();
+			
+			// Kill this activity.
+			Log.i(Application.TAG, "Kill Main Activity");
+			Main.this.finish();
+			
+		}
+		else{
+			
+			if(firstUse){
+				showHelp();
+			}
+			else{
+				showWhatsNew();
+			}
+		}
 		
-		// Kill this activity.
-		Log.i(Application.TAG, "Kill Main Activity");
-		Main.this.finish();
+	}
+
+	private void showHelp() {
 		
+		Intent help = new Intent(Main.this, DisplayFile.class);
+		help.putExtra("File", "help.html");
+		help.putExtra("Title", "Help: ");
+		Main.this.startActivityForResult(help, 900);
+		
+	}
+
+	private void showWhatsNew() {
+		
+		Intent newFeatures = new Intent(Main.this, DisplayFile.class);
+		newFeatures.putExtra("File", "NewFeatures.html");
+		newFeatures.putExtra("Title", "New Features: ");
+		Main.this.startActivityForResult(newFeatures, 900);
 	}
 
 	private void startApp() {
@@ -176,7 +244,9 @@ public class Main extends Activity implements Invoker,
 		if(message != null && !message.contentEquals("")){
 			
 			if(message.contentEquals("Show UI")){
-				startApp();
+				if(!wait){
+					startApp();
+				}
 			}
 			
 		}

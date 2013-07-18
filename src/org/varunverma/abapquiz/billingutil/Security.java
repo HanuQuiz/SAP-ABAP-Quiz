@@ -27,6 +27,7 @@ import java.security.spec.X509EncodedKeySpec;
 import android.text.TextUtils;
 import android.util.Log;
 
+
 /**
  * Security-related methods. For a secure implementation, all of this code
  * should be implemented on a server that communicates with the
