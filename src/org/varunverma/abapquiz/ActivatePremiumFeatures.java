@@ -16,6 +16,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -79,13 +80,25 @@ public class ActivatePremiumFeatures extends Activity implements
 		switch (item.getItemId()) {
 		
 			case android.R.id.home:
-				finish();
+				finishActivity(false);
 				return true;
 				
 			default:
 	            return false;
 		}
 		
+	}
+	
+	@Override
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+		
+	    if ((keyCode == KeyEvent.KEYCODE_BACK)) {
+	    	
+	    	finishActivity(false);
+	    	return true;
+	    }
+
+	    return super.onKeyDown(keyCode, event);
 	}
 	
 	private void showProductHelp() {

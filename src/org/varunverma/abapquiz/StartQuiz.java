@@ -95,6 +95,9 @@ public class StartQuiz extends FragmentActivity implements IF_QuizUI{
 		switch (item.getItemId()) {
 		
 			case android.R.id.home:
+				if(quiz.getStatus() != Quiz.QuizStatus.Completed){
+					quiz.pause();
+				}
 				finish();
 				return true;
 				
