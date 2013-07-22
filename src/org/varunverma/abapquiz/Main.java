@@ -88,7 +88,12 @@ public class Main extends Activity implements Invoker,
 		billingHelper = IabHelper.getInstance(this, Constants.getPublicKey());
 		
 		// Set up
-		billingHelper.startSetup(this);
+		try{
+			billingHelper.startSetup(this);
+		}
+		catch(Exception e){
+			Log.w(Application.TAG, e.getMessage(), e);
+		}
 
 	}
 	
@@ -274,7 +279,14 @@ public class Main extends Activity implements Invoker,
 			
 			List<String> productList = new ArrayList<String>();
 			productList.add(Constants.getProductKey());
-			billingHelper.queryInventoryAsync(true, productList, this);
+			
+			try{
+				billingHelper.queryInventoryAsync(true, productList, this);
+			}
+			catch(Exception e){
+				Log.w(Application.TAG, e.getMessage(), e);
+			}
+			
 		}
 		
 	}
@@ -331,7 +343,12 @@ public class Main extends Activity implements Invoker,
 	protected void onDestroy(){
 		
 		if(Constants.isPremiumVersion()){
-			billingHelper.dispose();
+			try{
+				IabHelper.getInstance().dispose();
+			}
+			catch(Exception e){
+				Log.w(Application.TAG, e.getMessage(), e);
+			}
 		}
 		super.onDestroy();
 	}

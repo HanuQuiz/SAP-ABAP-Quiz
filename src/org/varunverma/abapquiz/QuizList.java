@@ -14,6 +14,7 @@ import android.app.ActionBar.OnNavigationListener;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -166,7 +167,12 @@ public class QuizList extends Activity implements OnNavigationListener, OnItemCl
 	protected void onDestroy(){
 		
 		// Close billing helper
-		IabHelper.getInstance().dispose();
+		try{
+			IabHelper.getInstance().dispose();
+		}
+		catch(Exception e){
+			Log.w(Application.TAG, e.getMessage(), e);
+		}
 
 		// Close app
 		app.close();

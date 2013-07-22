@@ -20,6 +20,9 @@
     <string name="cancel">Cancel</string>
     <string name="accept">I Agree</string>
     <string name="loading">Loading....</string>
+    <string name="swipe_help">Swipe to the Right / Left to move to the previous / next question</string>
+    <string name="show_help_again">Don\'t show this again</string>
+    <string name="ok_got_it">OK. Got it !</string>
     
     <string-array name="DifficultyLevel">
         <item >Beginner</item>

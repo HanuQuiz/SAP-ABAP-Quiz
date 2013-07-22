@@ -6,6 +6,7 @@ package org.varunverma.abapquiz;
 import java.util.HashMap;
 import java.util.Iterator;
 
+import org.varunverma.hanuquiz.Application;
 import org.varunverma.hanuquiz.Quiz;
 import org.varunverma.hanuquiz.QuizManager;
 
@@ -15,6 +16,11 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.LinearLayout;
 
 import com.google.ads.AdRequest;
 import com.google.ads.AdView;
@@ -72,6 +78,34 @@ public class StartQuiz extends FragmentActivity implements IF_QuizUI{
 		// Tracking.
         EasyTracker.getInstance().activityStart(this);
         EasyTracker.getTracker().sendView("/Quiz/" + quiz.getDescription());
+        
+        // Show swipe help ?
+        String swipeHelp = Application.getApplicationInstance().getSettings().get("SwipeHelp");
+        final LinearLayout swipeHelpLayout = (LinearLayout) findViewById(R.id.swipe_help);
+        
+        if(swipeHelp != null && swipeHelp.contentEquals("Skip")){
+        	// Skip the swipe help
+        	swipeHelpLayout.setVisibility(View.GONE);
+        }
+        else{
+        	
+        	final CheckBox showHelpAgain = (CheckBox) swipeHelpLayout.findViewById(R.id.show_again);
+        	
+        	Button dismissHelp = (Button) swipeHelpLayout.findViewById(R.id.dismiss_help);
+        	dismissHelp.setOnClickListener(new OnClickListener() {
+				
+				@Override
+				public void onClick(View view) {
+					// Hide the swipe help
+					swipeHelpLayout.setVisibility(View.GONE);
+					
+					if(showHelpAgain.isChecked()){
+						Application.getApplicationInstance().addParameter("SwipeHelp", "Skip");
+					}
+				}
+			});
+        	
+        }
 		
 	}
 	
