@@ -17,6 +17,9 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+import android.view.animation.Animation;
+import android.view.animation.TranslateAnimation;
+
 /**
  * @author varun
  *
@@ -59,7 +62,10 @@ public class QuizResultFragment extends Fragment {
 		
 		quizResultView = (TextView) rootView.findViewById(R.id.quiz_result);
 		
-		showQuizScore();
+		//showQuizScore();
+		quizResultView.setTextSize(20);
+		quizResultView.setText("Click on Evaluate to check your score");
+		quizResultView.setTextColor(Color.GRAY); 
 		
 		Button evaluateQuiz = (Button) rootView.findViewById(R.id.evaluate_quiz);
 		Button done = (Button) rootView.findViewById(R.id.done);
@@ -91,6 +97,8 @@ public class QuizResultFragment extends Fragment {
 		int score = quiz.getScore();
 		int count = quiz.getCount();
 		
+		quizResultView.setTextSize(60); //Score Size
+		
 		String myScore = String.valueOf(score) + " / " + String.valueOf(count);
 		quizResultView.setText(myScore);
 		
@@ -104,6 +112,12 @@ public class QuizResultFragment extends Fragment {
 		else{
 			quizResultView.setTextColor(Color.MAGENTA);
 		}
+		
+		 quizResultView.setTop(0);
+		Animation animation=new TranslateAnimation(0,0,0,0,	Animation.ZORDER_BOTTOM, 300,Animation.ZORDER_TOP,0);
+	    animation.setDuration(1000);
+	    quizResultView.setAnimation(animation);
+	    
 		
 	}
 

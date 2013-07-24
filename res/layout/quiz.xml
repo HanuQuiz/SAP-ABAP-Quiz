@@ -21,7 +21,6 @@
         android:layout_above="@id/adView" />
     
     <include layout="@layout/swipe_help" 
-        android:id="@+id/swipe_help"
-        android:layout_centerHorizontal="true" />
+        android:id="@+id/swipe_help" />
 
 </RelativeLayout>

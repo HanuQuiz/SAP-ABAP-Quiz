@@ -19,6 +19,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 
+
 /**
  * Represents an in-app product's listing details.
  */
