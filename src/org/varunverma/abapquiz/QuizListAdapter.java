@@ -8,6 +8,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
@@ -16,6 +17,7 @@ import android.widget.TextView;
 public class QuizListAdapter extends ArrayAdapter<Quiz> {
 
 	private List<Quiz> quizList;
+	private OnClickListener clickHandler;
 	
 	public QuizListAdapter(Context context, int resId, List<Quiz> objects) {
 		
@@ -50,6 +52,9 @@ public class QuizListAdapter extends ArrayAdapter<Quiz> {
 		
 		// Set Icon
 		ImageView quizIcon = (ImageView) rowView.findViewById(R.id.status);
+		quizIcon.setTag(String.valueOf(position));
+		quizIcon.setOnClickListener(clickHandler);
+		
 		if(quiz.getStatus() == Quiz.QuizStatus.Completed){
 			quizIcon.setImageResource(R.drawable.completed);
 		}
@@ -91,6 +96,10 @@ public class QuizListAdapter extends ArrayAdapter<Quiz> {
 		
 		return rowView;
 		
+	}
+
+	void setViewClickListener(OnClickListener clickHandler) {
+		this.clickHandler = clickHandler;
 	}
 
 }
