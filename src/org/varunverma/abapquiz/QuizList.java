@@ -15,6 +15,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.util.SparseBooleanArray;
 import android.view.ActionMode;
 import android.view.ActionMode.Callback;
 import android.view.Menu;
@@ -60,7 +61,6 @@ public class QuizList extends Activity implements OnNavigationListener, OnItemCl
 				else{
 					listView.setItemChecked(position, true);
 				}
-				// TODO - Varun to fix the list selection issue
 				/*
 				 * TODO - Pramodh
 				 * Pramodh to code the following
@@ -256,6 +256,7 @@ public class QuizList extends Activity implements OnNavigationListener, OnItemCl
 		Intent startQuiz = new Intent(QuizList.this, StartQuiz.class);
 		startQuiz.putExtra("QuizId", quiz.getQuizId());
 		startActivityForResult(startQuiz, 998);
+		listView.setItemChecked(pos, false);
 
 	}
 	
@@ -291,7 +292,8 @@ public class QuizList extends Activity implements OnNavigationListener, OnItemCl
 		 * a) Find out the items that are selected (See related to do item)
 		 * b) For each quiz - reset its status. Call quiz.resetStatus();
 		 */
-		return false;
+		am.finish();
+		return true;
 	}
 
 	@Override
@@ -305,13 +307,24 @@ public class QuizList extends Activity implements OnNavigationListener, OnItemCl
 	@Override
 	public void onDestroyActionMode(ActionMode am) {
 		
+		// Uncheck all items
+		SparseBooleanArray checkedItems = listView.getCheckedItemPositions();
+		
+		for(int i=0; i<checkedItems.size(); i++){
+			
+			if(checkedItems.valueAt(i)){
+				listView.setItemChecked(checkedItems.keyAt(i), false);
+			}
+			
+		}
+		
 		actionMode = null;
 		
 	}
 
 	@Override
 	public boolean onPrepareActionMode(ActionMode am, Menu menu) {
-		// TODO Auto-generated method stub
+		// nothing to do
 		return false;
 	}
 
