@@ -67,6 +67,17 @@ public class QuizList extends Activity implements OnNavigationListener, OnItemCl
 				 * a) Remember the positions that are selected
 				 * b) Use them to reset the quiz - see other to do items
 				 */
+				
+				SparseBooleanArray checkedItems = listView.getCheckedItemPositions();
+				
+				for(int i=0; i<checkedItems.size(); i++){
+					
+					if(checkedItems.valueAt(i)){
+						Quiz quiz = quizList.get(checkedItems.keyAt(i));
+						quiz.resetStatus(); // reset status of the selected quiz
+					}
+				}
+				
 			}
 		}
 		
