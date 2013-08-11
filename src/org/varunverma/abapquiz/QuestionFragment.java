@@ -28,6 +28,7 @@ import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.content.res.* ;
 
 /**
  * @author varun
@@ -112,6 +113,9 @@ public class QuestionFragment extends Fragment {
 		List<Integer> answers = question.getAnswers();
 		CompoundButton compoundButton;
 		
+		Resources res = getResources();
+		int green_color = res.getColor(R.color.green);
+		
 		Iterator<Integer> i = options.keySet().iterator();
 		while(i.hasNext()){
 			
@@ -142,9 +146,9 @@ public class QuestionFragment extends Fragment {
 			}
 			
 			if(quiz.getStatus() == Quiz.QuizStatus.Completed){
-				if(answers.contains(optionId)){
-					compoundButton.setTextColor(Color.GREEN);
-				}
+				if(answers.contains(optionId)){			
+					compoundButton.setTextColor(green_color);					
+				}				
 			}
 			
 		}
