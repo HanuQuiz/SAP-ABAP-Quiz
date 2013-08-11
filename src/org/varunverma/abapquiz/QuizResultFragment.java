@@ -103,7 +103,7 @@ public class QuizResultFragment extends Fragment {
 		
 		float perct = 100 * score / count;
 		if(perct >= 70){
-			quizResultView.setTextColor(Color.GREEN);
+			quizResultView.setTextColor(getActivity().getResources().getColor(R.color.green));
 		}
 		else if(perct < 50){
 			quizResultView.setTextColor(Color.RED);

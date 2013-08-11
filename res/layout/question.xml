@@ -25,10 +25,5 @@
         android:layout_height="wrap_content"
         android:orientation="vertical" >
     </LinearLayout>
-    
-    <ImageView
-         android:id="@+id/answer_image"
-        android:layout_width="match_parent"
-        android:layout_height="135dp" />
 
 </LinearLayout>

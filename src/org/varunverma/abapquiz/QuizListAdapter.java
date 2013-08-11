@@ -80,7 +80,7 @@ public class QuizListAdapter extends ArrayAdapter<Quiz> {
 			
 			float perct = 100 * quiz.getScore() / quiz.getCount();
 			if(perct >= 70){
-				score.setTextColor(Color.GREEN);
+				score.setTextColor(getContext().getResources().getColor(R.color.green));
 			}
 			else if(perct < 50){
 				score.setTextColor(Color.RED);
