@@ -2,8 +2,16 @@ package org.varunverma.abapquiz;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 import org.varunverma.CommandExecuter.ResultObject;
+import org.varunverma.abapquiz.billingutil.IabHelper;
+import org.varunverma.abapquiz.billingutil.IabHelper.OnIabSetupFinishedListener;
+import org.varunverma.abapquiz.billingutil.IabHelper.QueryInventoryFinishedListener;
+import org.varunverma.abapquiz.billingutil.IabResult;
+import org.varunverma.abapquiz.billingutil.Inventory;
+import org.varunverma.abapquiz.billingutil.Purchase;
+import org.varunverma.hanuquiz.Application;
 import org.varunverma.hanuquiz.HanuGCMIntentService;
 
 import android.app.Notification;
@@ -12,24 +20,122 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v4.app.NotificationCompat;
+import android.util.Log;
 
 public class GCMIntentService extends HanuGCMIntentService {
 	
 	@Override
 	protected void onMessage(Context context, Intent intent) {
 		
+		/*
+		 * We must first initialize billing helper.
+		 * So that we know if this is a free user or paid user !
+		 */
+		
+		// Initialize the application
+		Application app = Application.getApplicationInstance();
+		app.setContext(context);
+				
+		// Instantiate billing helper class
+		IabHelper billingHelper = IabHelper.getInstance(context, Constants.getPublicKey());
+
+		// Set up
+		try {
+			
+			billingHelper.startSetup(new OnIabSetupFinishedListener(){
+
+				@Override
+				public void onIabSetupFinished(IabResult result) {
+					
+					if (!result.isSuccess()) {
+						
+						// Log error ! Now I don't know what to do
+						Log.w(Application.TAG, result.getMessage());
+						Application.getApplicationInstance().setSyncCategory("Free");					
+						
+					} else {
+						
+						// Check if the user has purchased premium service			
+						// Query for Product Details
+						Log.i(Application.TAG, "IAB Initialize Done");
+						List<String> productList = new ArrayList<String>();
+						productList.add(Constants.getProductKey());
+						
+						try{
+							
+							IabHelper.getInstance().queryInventoryAsync(true, productList, new QueryInventoryFinishedListener(){
+
+								@Override
+								public void onQueryInventoryFinished(IabResult result, Inventory inv) {
+									
+									if (result.isFailure()) {
+										
+										// Log error ! Now I don't know what to do
+										Log.w(Application.TAG, result.getMessage());
+										Application.getApplicationInstance().setSyncCategory("Free");
+										
+									} else {
+										
+										Log.i(Application.TAG, "IAB Inventory Query Done");
+										String productKey = Constants.getProductKey();
+										
+										Purchase item = inv.getPurchase(productKey);
+										
+										if (item != null) {
+											// Has user purchased this premium service ???
+											Constants.setPremiumVersion(inv.hasPurchase(productKey));
+											
+											if(Constants.isPremiumVersion()){
+												Application.getApplicationInstance().setSyncCategory("Premium");
+											}
+											else{
+												Application.getApplicationInstance().setSyncCategory("Free");
+											}
+										}
+										else{
+											Application.getApplicationInstance().setSyncCategory("Free");
+										}
+										
+									}
+									
+								}});
+							
+						}
+						catch(Exception e){
+							Log.w(Application.TAG, e.getMessage(), e);
+							Application.getApplicationInstance().setSyncCategory("Free");
+						}
+						
+					}
+					
+				}});
+			
+		} catch (Exception e) {
+			Log.w(Application.TAG, e.getMessage(), e);
+			Application.getApplicationInstance().setSyncCategory("Free");
+		}
+		
+		IABInitializeDone(intent);
+		
+	}
+	
+	private void IABInitializeDone(Intent intent){
+		
 		String message = intent.getExtras().getString("message");
+
 		if (message.contentEquals("InfoMessage")) {
 			// Show Info Message to the User
 			showInfoMessage(intent);
+
 		} else {
 
-			ResultObject result = processMessage(context, intent);
+			ResultObject result = processMessage(intent);
 
 			if (result.getData().getBoolean("ShowNotification")) {
 				createNotification(result);
 			}
 		}
+		
 	}
 
 	private void showInfoMessage(Intent intent) {
