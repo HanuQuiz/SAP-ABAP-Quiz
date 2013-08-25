@@ -25,7 +25,7 @@ import android.util.Log;
 public class GCMIntentService extends HanuGCMIntentService {
 	
 	@Override
-	protected void onMessage(Context context, Intent intent) {
+	protected void onMessage(Context context, final Intent intent) {
 		
 		/*
 		 * We must first initialize billing helper.
@@ -51,7 +51,8 @@ public class GCMIntentService extends HanuGCMIntentService {
 						
 						// Log error ! Now I don't know what to do
 						Log.w(Application.TAG, result.getMessage());
-						Application.getApplicationInstance().setSyncCategory("Free");					
+						Application.getApplicationInstance().setSyncCategory("Free");
+						IABInitializeDone(intent);
 						
 					} else {
 						
@@ -73,6 +74,7 @@ public class GCMIntentService extends HanuGCMIntentService {
 										// Log error ! Now I don't know what to do
 										Log.w(Application.TAG, result.getMessage());
 										Application.getApplicationInstance().setSyncCategory("Free");
+										IABInitializeDone(intent);
 										
 									} else {
 										
@@ -96,6 +98,8 @@ public class GCMIntentService extends HanuGCMIntentService {
 											Application.getApplicationInstance().setSyncCategory("Free");
 										}
 										
+										IABInitializeDone(intent);
+										
 									}
 									
 								}});
@@ -104,6 +108,7 @@ public class GCMIntentService extends HanuGCMIntentService {
 						catch(Exception e){
 							Log.w(Application.TAG, e.getMessage(), e);
 							Application.getApplicationInstance().setSyncCategory("Free");
+							IABInitializeDone(intent);
 						}
 						
 					}
@@ -113,10 +118,9 @@ public class GCMIntentService extends HanuGCMIntentService {
 		} catch (Exception e) {
 			Log.w(Application.TAG, e.getMessage(), e);
 			Application.getApplicationInstance().setSyncCategory("Free");
+			IABInitializeDone(intent);
 		}
-		
-		IABInitializeDone(intent);
-		
+			
 	}
 	
 	private void IABInitializeDone(Intent intent){
