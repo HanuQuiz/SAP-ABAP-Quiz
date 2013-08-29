@@ -5,9 +5,9 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.varunverma.CommandExecuter.ResultObject;
+import org.varunverma.abapquiz.billingutil.IabException;
 import org.varunverma.abapquiz.billingutil.IabHelper;
 import org.varunverma.abapquiz.billingutil.IabHelper.OnIabSetupFinishedListener;
-import org.varunverma.abapquiz.billingutil.IabHelper.QueryInventoryFinishedListener;
 import org.varunverma.abapquiz.billingutil.IabResult;
 import org.varunverma.abapquiz.billingutil.Inventory;
 import org.varunverma.abapquiz.billingutil.Purchase;
@@ -19,6 +19,7 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.os.StrictMode;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
@@ -58,55 +59,41 @@ public class GCMIntentService extends HanuGCMIntentService {
 						
 						// Check if the user has purchased premium service			
 						// Query for Product Details
-						Log.i(Application.TAG, "IAB Initialize Done");
+						Log.i(Application.TAG, "IAB Initialize Success");
 						List<String> productList = new ArrayList<String>();
 						productList.add(Constants.getProductKey());
 						
-						try{
+						try {
 							
-							IabHelper.getInstance().queryInventoryAsync(true, productList, new QueryInventoryFinishedListener(){
-
-								@Override
-								public void onQueryInventoryFinished(IabResult result, Inventory inv) {
-									
-									if (result.isFailure()) {
-										
-										// Log error ! Now I don't know what to do
-										Log.w(Application.TAG, result.getMessage());
-										Application.getApplicationInstance().setSyncCategory("Free");
-										IABInitializeDone(intent);
-										
-									} else {
-										
-										Log.i(Application.TAG, "IAB Inventory Query Done");
-										String productKey = Constants.getProductKey();
-										
-										Purchase item = inv.getPurchase(productKey);
-										
-										if (item != null) {
-											// Has user purchased this premium service ???
-											Constants.setPremiumVersion(inv.hasPurchase(productKey));
-											
-											if(Constants.isPremiumVersion()){
-												Application.getApplicationInstance().setSyncCategory("Premium");
-											}
-											else{
-												Application.getApplicationInstance().setSyncCategory("Free");
-											}
-										}
-										else{
-											Application.getApplicationInstance().setSyncCategory("Free");
-										}
-										
-										IABInitializeDone(intent);
-										
-									}
-									
-								}});
+							Inventory inv = IabHelper.getInstance().queryInventory(true, productList);
 							
-						}
-						catch(Exception e){
-							Log.w(Application.TAG, e.getMessage(), e);
+							Log.i(Application.TAG, "IAB Inventory Query Done");
+							String productKey = Constants.getProductKey();
+							
+							Purchase item = inv.getPurchase(productKey);
+							
+							if (item != null) {
+								// Has user purchased this premium service ???
+								Log.v(Application.TAG, "Item is not null");
+								Constants.setPremiumVersion(inv.hasPurchase(productKey));
+								
+								if(Constants.isPremiumVersion()){
+									Application.getApplicationInstance().setSyncCategory("Premium");
+								}
+								else{
+									Application.getApplicationInstance().setSyncCategory("Free");
+								}
+							}
+							else{
+								Log.v(Application.TAG, "Item is null");
+								Application.getApplicationInstance().setSyncCategory("Free");
+							}
+							
+							IABInitializeDone(intent);
+							
+						} catch (IabException e1) {
+							
+							Log.w(Application.TAG, e1.getMessage(), e1);
 							Application.getApplicationInstance().setSyncCategory("Free");
 							IABInitializeDone(intent);
 						}
@@ -125,6 +112,13 @@ public class GCMIntentService extends HanuGCMIntentService {
 	
 	private void IABInitializeDone(Intent intent){
 		
+		Log.v(Application.TAG, "IAB Init Done. Will dispose now");
+		IabHelper.getInstance().dispose();
+		
+		Log.i(Application.TAG, "Setting new thread policy");
+		StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+	    StrictMode.setThreadPolicy(policy);
+		
 		String message = intent.getExtras().getString("message");
 
 		if (message.contentEquals("InfoMessage")) {
@@ -134,6 +128,13 @@ public class GCMIntentService extends HanuGCMIntentService {
 		} else {
 
 			ResultObject result = processMessage(intent);
+			
+			if(result.isCommandExecutionSuccess()){
+				Log.v(Application.TAG, "Command Execution Success");
+			}
+			else{
+				Log.w(Application.TAG, "Command Execution failed", result.getException());
+			}
 
 			if (result.getData().getBoolean("ShowNotification")) {
 				createNotification(result);
