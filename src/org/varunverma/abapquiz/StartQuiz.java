@@ -20,6 +20,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.Chronometer;
 import android.widget.LinearLayout;
 
 import com.google.ads.AdRequest;
@@ -37,6 +38,7 @@ public class StartQuiz extends FragmentActivity implements IF_QuizUI{
 	private int quizId;
 	private Quiz quiz;
 	private HashMap<Integer,QuestionFragment> fragments;
+	private Chronometer timer;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +48,9 @@ public class StartQuiz extends FragmentActivity implements IF_QuizUI{
 		fragments = new HashMap<Integer,QuestionFragment>();
 		
 		setContentView(R.layout.quiz);
+		
+		timer = (Chronometer) findViewById(R.id.chronometer);
+		timer.start();
 		
 		quizId = getIntent().getIntExtra("QuizId", -1);
 		if(quizId == -1){
@@ -112,12 +117,16 @@ public class StartQuiz extends FragmentActivity implements IF_QuizUI{
 	@Override
 	protected void onStart() {
 		
+		timer.start();
 		super.onStart();
 			
 	}
 	
 	@Override
 	public void onStop() {
+		
+		timer.stop();
+		
 		super.onStop();
 		// The rest of your onStop() code.
 		EasyTracker.getInstance().activityStop(this);
@@ -154,6 +163,8 @@ public class StartQuiz extends FragmentActivity implements IF_QuizUI{
 
 	@Override
 	public void evaluateQuiz() {
+		
+		timer.stop();
 		
 		Iterator<QuestionFragment> i = fragments.values().iterator();
 		while(i.hasNext()){
