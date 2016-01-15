@@ -1,19 +1,5 @@
 package org.varunverma.abapquiz;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.varunverma.CommandExecuter.Invoker;
-import org.varunverma.CommandExecuter.ProgressInfo;
-import org.varunverma.CommandExecuter.ResultObject;
-import org.varunverma.abapquiz.billingutil.IabHelper;
-import org.varunverma.abapquiz.billingutil.IabHelper.OnIabSetupFinishedListener;
-import org.varunverma.abapquiz.billingutil.IabHelper.QueryInventoryFinishedListener;
-import org.varunverma.abapquiz.billingutil.IabResult;
-import org.varunverma.abapquiz.billingutil.Inventory;
-import org.varunverma.abapquiz.billingutil.Purchase;
-import org.varunverma.hanuquiz.Application;
-
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -24,7 +10,21 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.widget.TextView;
 
-import com.google.analytics.tracking.android.EasyTracker;
+import org.varunverma.CommandExecuter.CommandExecuter;
+import org.varunverma.CommandExecuter.Invoker;
+import org.varunverma.CommandExecuter.ProgressInfo;
+import org.varunverma.CommandExecuter.ResultObject;
+import org.varunverma.abapquiz.billingutil.IabHelper;
+import org.varunverma.abapquiz.billingutil.IabHelper.OnIabSetupFinishedListener;
+import org.varunverma.abapquiz.billingutil.IabHelper.QueryInventoryFinishedListener;
+import org.varunverma.abapquiz.billingutil.IabResult;
+import org.varunverma.abapquiz.billingutil.Inventory;
+import org.varunverma.abapquiz.billingutil.Purchase;
+import org.varunverma.hanuquiz.Application;
+import org.varunverma.hanuquiz.SaveRegIdCommand;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class Main extends Activity implements Invoker,
 		OnIabSetupFinishedListener, QueryInventoryFinishedListener {
@@ -50,10 +50,7 @@ public class Main extends Activity implements Invoker,
 		
 		// Set application context.
 		app.setContext(this);
-		
-		// Tracking.
-        EasyTracker.getInstance().activityStart(this);
-        
+
 		// Accept my Terms
 		if (!app.isEULAAccepted()) {
 			
@@ -80,9 +77,35 @@ public class Main extends Activity implements Invoker,
 	}
 	
 	private void startMainActivity() {
-		
+
 		// Register application.
-        app.registerAppForGCM();
+		String regStatus = app.getSettings().get("RegistrationStatus");
+		String regId = app.getSettings().get("RegistrationId");
+
+		if(regId == null || regId.contentEquals("")) {
+
+			Intent intent = new Intent(this, AppRegistrationService.class);
+			startService(intent);
+
+		}
+		else{
+
+			if(regStatus == null || regStatus.contentEquals("")) {
+
+				CommandExecuter ce = new CommandExecuter();
+
+				SaveRegIdCommand command = new SaveRegIdCommand(new Invoker() {
+					public void NotifyCommandExecuted(ResultObject result) {
+					}
+
+					public void ProgressUpdate(ProgressInfo pi) {
+					}
+				}, regId);
+
+				ce.execute(command);
+
+			}
+		}
 		
 		// Instantiate billing helper class
 		billingHelper = IabHelper.getInstance(this, Constants.getPublicKey());
@@ -331,14 +354,7 @@ public class Main extends Activity implements Invoker,
 		initializeApp();
 		
 	}
-	
-	@Override
-	public void onStop() {
-		super.onStop();
-		// The rest of your onStop() code.
-		EasyTracker.getInstance().activityStop(this);
-	}
-	
+
 	@Override
 	protected void onDestroy(){
 		

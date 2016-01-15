@@ -1,8 +1,14 @@
 package org.varunverma.abapquiz;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
+import android.os.StrictMode;
+import android.support.v4.app.NotificationCompat;
+import android.util.Log;
 
 import org.varunverma.CommandExecuter.ResultObject;
 import org.varunverma.abapquiz.billingutil.IabException;
@@ -12,33 +18,33 @@ import org.varunverma.abapquiz.billingutil.IabResult;
 import org.varunverma.abapquiz.billingutil.Inventory;
 import org.varunverma.abapquiz.billingutil.Purchase;
 import org.varunverma.hanuquiz.Application;
-import org.varunverma.hanuquiz.HanuGCMIntentService;
+import org.varunverma.hanuquiz.HanuGCMListenerService;
 
-import android.app.Notification;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
-import android.content.Context;
-import android.content.Intent;
-import android.os.StrictMode;
-import android.support.v4.app.NotificationCompat;
-import android.util.Log;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
-public class GCMIntentService extends HanuGCMIntentService {
-	
+public class AppGcmListenerService extends HanuGCMListenerService {
+
+	private String from;
+	private Bundle data;
+
 	@Override
-	protected void onMessage(Context context, final Intent intent) {
+	public void onMessageReceived(String from, Bundle data) {
 		
 		/*
 		 * We must first initialize billing helper.
 		 * So that we know if this is a free user or paid user !
 		 */
+		this.from = from;
+		this.data = data;
 		
 		// Initialize the application
 		Application app = Application.getApplicationInstance();
-		app.setContext(context);
+		app.setContext(this.getApplicationContext());
 				
 		// Instantiate billing helper class
-		IabHelper billingHelper = IabHelper.getInstance(context, Constants.getPublicKey());
+		IabHelper billingHelper = IabHelper.getInstance(getApplicationContext(), Constants.getPublicKey());
 
 		// Set up
 		try {
@@ -53,7 +59,7 @@ public class GCMIntentService extends HanuGCMIntentService {
 						// Log error ! Now I don't know what to do
 						Log.w(Application.TAG, result.getMessage());
 						Application.getApplicationInstance().setSyncCategory("Free");
-						IABInitializeDone(intent);
+						IABInitializeDone();
 						
 					} else {
 						
@@ -89,13 +95,13 @@ public class GCMIntentService extends HanuGCMIntentService {
 								Application.getApplicationInstance().setSyncCategory("Free");
 							}
 							
-							IABInitializeDone(intent);
+							IABInitializeDone();
 							
 						} catch (IabException e1) {
 							
 							Log.w(Application.TAG, e1.getMessage(), e1);
 							Application.getApplicationInstance().setSyncCategory("Free");
-							IABInitializeDone(intent);
+							IABInitializeDone();
 						}
 						
 					}
@@ -105,12 +111,12 @@ public class GCMIntentService extends HanuGCMIntentService {
 		} catch (Exception e) {
 			Log.w(Application.TAG, e.getMessage(), e);
 			Application.getApplicationInstance().setSyncCategory("Free");
-			IABInitializeDone(intent);
+			IABInitializeDone();
 		}
 			
 	}
 	
-	private void IABInitializeDone(Intent intent){
+	private void IABInitializeDone(){
 		
 		Log.v(Application.TAG, "IAB Init Done. Will dispose now");
 		IabHelper.getInstance().dispose();
@@ -119,15 +125,15 @@ public class GCMIntentService extends HanuGCMIntentService {
 		StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
 	    StrictMode.setThreadPolicy(policy);
 		
-		String message = intent.getExtras().getString("message");
+		String message = data.getString("message");
 
 		if (message.contentEquals("InfoMessage")) {
 			// Show Info Message to the User
-			showInfoMessage(intent);
+			showInfoMessage(data);
 
 		} else {
 
-			ResultObject result = processMessage(intent);
+			ResultObject result = processMessage(from,data);
 			
 			if(result.isCommandExecutionSuccess()){
 				Log.v(Application.TAG, "Command Execution Success");
@@ -143,11 +149,11 @@ public class GCMIntentService extends HanuGCMIntentService {
 		
 	}
 
-	private void showInfoMessage(Intent intent) {
+	private void showInfoMessage(Bundle data) {
 		// Show Info Message
-		String subject = intent.getExtras().getString("subject");
-		String content = intent.getExtras().getString("content");
-		String mid = intent.getExtras().getString("message_id");
+		String subject = data.getString("subject");
+		String content = data.getString("content");
+		String mid = data.getString("message_id");
 		if(mid == null || mid.contentEquals("")){
 			mid = "0";
 		}

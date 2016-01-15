@@ -3,13 +3,6 @@
  */
 package org.varunverma.abapquiz;
 
-import java.util.HashMap;
-import java.util.Iterator;
-
-import org.varunverma.hanuquiz.Application;
-import org.varunverma.hanuquiz.Quiz;
-import org.varunverma.hanuquiz.QuizManager;
-
 import android.app.ActionBar;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
@@ -23,9 +16,15 @@ import android.widget.CheckBox;
 import android.widget.Chronometer;
 import android.widget.LinearLayout;
 
-import com.google.ads.AdRequest;
-import com.google.ads.AdView;
-import com.google.analytics.tracking.android.EasyTracker;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+
+import org.varunverma.hanuquiz.Application;
+import org.varunverma.hanuquiz.Quiz;
+import org.varunverma.hanuquiz.QuizManager;
+
+import java.util.HashMap;
+import java.util.Iterator;
 
 /**
  * @author Varun
@@ -60,12 +59,13 @@ public class StartQuiz extends FragmentActivity implements IF_QuizUI{
 		// Show Ad.
 		if (!Constants.isPremiumVersion()) {
 
-			AdRequest adRequest = new AdRequest();
-			adRequest.addTestDevice(AdRequest.TEST_EMULATOR);
-			adRequest.addTestDevice("E16F3DE5DF824FE222EDDA27A63E2F8A"); // My S2 mobile
-			adRequest.addTestDevice("06FE63303C3DA13C859515930A396C91");	// Pramodh's mobile
+			AdRequest adRequest = new AdRequest.Builder()
+					.addTestDevice(com.google.android.gms.ads.AdRequest.DEVICE_ID_EMULATOR)
+					.addTestDevice("9F11CAC92EB404500CAA3F8B0BBA5277").build();
+
 			AdView adView = (AdView) findViewById(R.id.adView);
 
+			// Start loading the ad in the background.
 			adView.loadAd(adRequest);
 
 		}
@@ -79,11 +79,7 @@ public class StartQuiz extends FragmentActivity implements IF_QuizUI{
 		ActionBar actionBar = getActionBar();
 		actionBar.setTitle(quiz.getDescription());
 		actionBar.setDisplayHomeAsUpEnabled(true);
-		
-		// Tracking.
-        EasyTracker.getInstance().activityStart(this);
-        EasyTracker.getTracker().sendView("/Quiz/" + quiz.getDescription());
-        
+
         // Show swipe help ?
         String swipeHelp = Application.getApplicationInstance().getSettings().get("SwipeHelp");
         final LinearLayout swipeHelpLayout = (LinearLayout) findViewById(R.id.swipe_help);
@@ -128,8 +124,7 @@ public class StartQuiz extends FragmentActivity implements IF_QuizUI{
 		timer.stop();
 		
 		super.onStop();
-		// The rest of your onStop() code.
-		EasyTracker.getInstance().activityStop(this);
+
 	}
 	
 	@Override

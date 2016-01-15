@@ -28,9 +28,8 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
-import com.google.ads.AdRequest;
-import com.google.ads.AdView;
-import com.google.analytics.tracking.android.EasyTracker;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
 
 public class QuizList extends Activity implements OnNavigationListener, OnItemClickListener, Callback {
 	
@@ -89,34 +88,24 @@ public class QuizList extends Activity implements OnNavigationListener, OnItemCl
 		actionBar.setDisplayShowTitleEnabled(false);
 		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
 		
-		// Tracking.
-        EasyTracker.getInstance().activityStart(this);
-
 		// Start the UI
 		showUI();
 
 	}
-	
-	@Override
-	public void onStop() {
-		
-		super.onStop();
-		
-		// The rest of your onStop() code.
-		EasyTracker.getInstance().activityStop(this);
-	}
-	
+
 	private void showUI() {
 		
 		// Show Ad.
 		if(!Constants.isPremiumVersion()){
-			
-			AdRequest adRequest = new AdRequest();
-			adRequest.addTestDevice(AdRequest.TEST_EMULATOR);
-			adRequest.addTestDevice("E16F3DE5DF824FE222EDDA27A63E2F8A");	// My S2 Mobile
-			adRequest.addTestDevice("06FE63303C3DA13C859515930A396C91");	// Pramodh's mobile
+
+			// Show Ad.
+			AdRequest adRequest = new AdRequest.Builder()
+					.addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
+					.addTestDevice("9F11CAC92EB404500CAA3F8B0BBA5277").build();
+
 			AdView adView = (AdView) findViewById(R.id.adView);
-			
+
+			// Start loading the ad in the background.
 			adView.loadAd(adRequest);
 			
 		}
