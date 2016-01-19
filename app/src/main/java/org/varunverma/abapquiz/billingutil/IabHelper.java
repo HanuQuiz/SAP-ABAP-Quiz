@@ -157,7 +157,7 @@ public class IabHelper {
 
     public static IabHelper getInstance(Context ctx, String base64PublicKey){
 
-        if(instance == null){
+        if(instance == null || instance.mDisposed){
 
             instance = new IabHelper(ctx, base64PublicKey);
 
