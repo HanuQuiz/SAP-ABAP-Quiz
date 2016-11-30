@@ -7,7 +7,6 @@ import org.varunverma.abapquiz.billingutil.IabHelper;
 import org.varunverma.abapquiz.billingutil.IabHelper.OnIabPurchaseFinishedListener;
 import org.varunverma.abapquiz.billingutil.IabResult;
 import org.varunverma.abapquiz.billingutil.Purchase;
-import org.varunverma.hanuquiz.Application;
 
 import android.app.ActionBar;
 import android.app.Activity;
@@ -22,6 +21,9 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.TextView;
+
+import com.ayansh.hanuquiz.Application;
+import com.google.firebase.analytics.FirebaseAnalytics;
 
 /**
  * @author varun
@@ -52,7 +54,13 @@ public class ActivatePremiumFeatures extends Activity implements
 		
 		ActionBar actionBar = getActionBar();
 		actionBar.setDisplayHomeAsUpEnabled(true);
-		
+
+		// Log Firebase Event
+		Bundle bundle = new Bundle();
+		bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "premium_user");
+		bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, "Premium User");
+		Application.getApplicationInstance().getFirebaseAnalytics().logEvent(FirebaseAnalytics.Event.PRESENT_OFFER, bundle);
+
 	}
 	
 	@Override

@@ -1,6 +1,6 @@
 package org.varunverma.abapquiz;
 
-import org.varunverma.hanuquiz.HanuInstanceIDListenerService;
+import com.ayansh.hanuquiz.HanuInstanceIDListenerService;
 
 public class AppInstanceIDService extends HanuInstanceIDListenerService {
 

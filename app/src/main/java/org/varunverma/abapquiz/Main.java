@@ -10,18 +10,19 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.widget.TextView;
 
-import org.varunverma.CommandExecuter.CommandExecuter;
-import org.varunverma.CommandExecuter.Invoker;
-import org.varunverma.CommandExecuter.ProgressInfo;
-import org.varunverma.CommandExecuter.ResultObject;
+import com.ayansh.CommandExecuter.CommandExecuter;
+import com.ayansh.CommandExecuter.Invoker;
+import com.ayansh.CommandExecuter.ProgressInfo;
+import com.ayansh.CommandExecuter.ResultObject;
+import com.ayansh.hanuquiz.Application;
+import com.ayansh.hanuquiz.SaveRegIdCommand;
+
 import org.varunverma.abapquiz.billingutil.IabHelper;
 import org.varunverma.abapquiz.billingutil.IabHelper.OnIabSetupFinishedListener;
 import org.varunverma.abapquiz.billingutil.IabHelper.QueryInventoryFinishedListener;
 import org.varunverma.abapquiz.billingutil.IabResult;
 import org.varunverma.abapquiz.billingutil.Inventory;
 import org.varunverma.abapquiz.billingutil.Purchase;
-import org.varunverma.hanuquiz.Application;
-import org.varunverma.hanuquiz.SaveRegIdCommand;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -83,12 +84,6 @@ public class Main extends Activity implements Invoker,
 		String regId = app.getSettings().get("RegistrationId");
 
 		if(regId == null || regId.contentEquals("")) {
-
-			Intent intent = new Intent(this, AppRegistrationService.class);
-			startService(intent);
-
-		}
-		else{
 
 			if(regStatus == null || regStatus.contentEquals("")) {
 

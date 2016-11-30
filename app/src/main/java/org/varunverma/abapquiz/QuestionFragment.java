@@ -7,11 +7,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-
-import org.varunverma.hanuquiz.Question;
-import org.varunverma.hanuquiz.Quiz;
-import org.varunverma.hanuquiz.QuizManager;
-
 import android.app.Activity;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -29,6 +24,10 @@ import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.content.res.* ;
+
+import com.ayansh.hanuquiz.Question;
+import com.ayansh.hanuquiz.Quiz;
+import com.ayansh.hanuquiz.QuizManager;
 
 /**
  * @author varun

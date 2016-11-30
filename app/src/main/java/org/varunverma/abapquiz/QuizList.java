@@ -6,8 +6,6 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.varunverma.abapquiz.billingutil.IabHelper;
-import org.varunverma.hanuquiz.Application;
-import org.varunverma.hanuquiz.Quiz;
 
 import android.app.ActionBar;
 import android.app.ActionBar.OnNavigationListener;
@@ -28,6 +26,8 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import com.ayansh.hanuquiz.Application;
+import com.ayansh.hanuquiz.Quiz;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 
@@ -107,6 +107,9 @@ public class QuizList extends Activity implements OnNavigationListener, OnItemCl
 
 			// Start loading the ad in the background.
 			adView.loadAd(adRequest);
+
+			MyInterstitialAd.getInterstitialAd(this);
+			MyInterstitialAd.requestNewInterstitial();
 			
 		}
 		

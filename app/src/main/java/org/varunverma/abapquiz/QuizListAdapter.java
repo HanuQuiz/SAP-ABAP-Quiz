@@ -2,8 +2,6 @@ package org.varunverma.abapquiz;
 
 import java.util.List;
 
-import org.varunverma.hanuquiz.Quiz;
-
 import android.content.Context;
 import android.graphics.Color;
 import android.view.LayoutInflater;
@@ -13,6 +11,8 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.ayansh.hanuquiz.Quiz;
 
 public class QuizListAdapter extends ArrayAdapter<Quiz> {
 
@@ -56,13 +56,13 @@ public class QuizListAdapter extends ArrayAdapter<Quiz> {
 		quizIcon.setOnClickListener(clickHandler);
 		
 		if(quiz.getStatus() == Quiz.QuizStatus.Completed){
-			quizIcon.setImageResource(R.drawable.completed);
+			quizIcon.setImageResource(R.mipmap.completed);
 		}
 		else if(quiz.getStatus() == Quiz.QuizStatus.Paused){
-			quizIcon.setImageResource(R.drawable.pause);
+			quizIcon.setImageResource(R.mipmap.pause);
 		}
 		else{
-			quizIcon.setImageResource(R.drawable.new_quiz);
+			quizIcon.setImageResource(R.mipmap.new_quiz);
 		}
 		
 		TextView title = (TextView) rowView.findViewById(R.id.title);

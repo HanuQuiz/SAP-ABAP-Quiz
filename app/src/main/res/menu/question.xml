@@ -1,9 +1,11 @@
-<menu xmlns:android="http://schemas.android.com/apk/res/android" >
-	
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
     <item
         android:id="@+id/reset"
-        android:showAsAction="always|withText"
-        android:icon="@drawable/reset"
+        app:showAsAction="always|withText"
+        android:icon="@mipmap/reset"
         android:titleCondensed="@string/reset"
         android:title="@string/reset"/>
 

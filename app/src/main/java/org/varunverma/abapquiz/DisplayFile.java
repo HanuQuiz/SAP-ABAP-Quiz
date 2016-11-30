@@ -5,8 +5,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
-import org.varunverma.hanuquiz.Application;
-
 import android.app.ActionBar;
 import android.app.Activity;
 import android.content.res.Configuration;
@@ -18,11 +16,16 @@ import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.webkit.WebView;
 
+import com.ayansh.hanuquiz.Application;
+import com.google.android.gms.ads.InterstitialAd;
+import com.google.firebase.analytics.FirebaseAnalytics;
+
 public class DisplayFile extends Activity {
 	
 	private String html_text;
 	private WebView my_web_view;
 	Application app = Application.getApplicationInstance();
+	private boolean show_ad = false;
 	
 	@Override
     public void onCreate(Bundle savedInstanceState) {
@@ -47,6 +50,16 @@ public class DisplayFile extends Activity {
        	if(fileName != null){
        		// If File name was provided, show from file name.
        		getHTMLFromFile(fileName);
+
+			if(fileName.contains("about")){
+				show_ad = true;
+			}
+
+			// Log Firebase Event
+			Bundle bundle = new Bundle();
+			bundle.putString(FirebaseAnalytics.Param.ITEM_ID, fileName);
+			bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "display_file");
+			app.getFirebaseAnalytics().logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
        	}
        	else{
        		// Else, show data directly.
@@ -64,7 +77,23 @@ public class DisplayFile extends Activity {
 	
 	@Override
 	protected void onDestroy(){
+
+		if(show_ad){
+			showInterstitialAd();
+		}
 		super.onDestroy();
+	}
+
+	private void showInterstitialAd(){
+
+		if (!Constants.isPremiumVersion()) {
+
+			InterstitialAd iad = MyInterstitialAd.getInterstitialAd(this);
+			if(iad.isLoaded()){
+				iad.show();
+			}
+		}
+
 	}
 	
 	@Override

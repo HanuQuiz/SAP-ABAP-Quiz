@@ -3,9 +3,6 @@
  */
 package org.varunverma.abapquiz;
 
-import org.varunverma.hanuquiz.Quiz;
-import org.varunverma.hanuquiz.QuizManager;
-
 import android.app.Activity;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -18,6 +15,9 @@ import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
 import android.widget.Button;
 import android.widget.TextView;
+
+import com.ayansh.hanuquiz.Quiz;
+import com.ayansh.hanuquiz.QuizManager;
 
 /**
  * @author varun

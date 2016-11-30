@@ -12,7 +12,7 @@
         android:layout_marginBottom="5dp"
         android:layout_centerVertical="true"
         android:layout_alignParentLeft="true"
-        android:src="@drawable/new_quiz" />
+        android:src="@mipmap/new_quiz" />
 
     <TextView
         android:id="@+id/score"

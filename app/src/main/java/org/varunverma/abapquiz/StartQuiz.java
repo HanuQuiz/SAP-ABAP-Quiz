@@ -16,12 +16,12 @@ import android.widget.CheckBox;
 import android.widget.Chronometer;
 import android.widget.LinearLayout;
 
+import com.ayansh.hanuquiz.Application;
+import com.ayansh.hanuquiz.Quiz;
+import com.ayansh.hanuquiz.QuizManager;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
-
-import org.varunverma.hanuquiz.Application;
-import org.varunverma.hanuquiz.Quiz;
-import org.varunverma.hanuquiz.QuizManager;
+import com.google.firebase.analytics.FirebaseAnalytics;
 
 import java.util.HashMap;
 import java.util.Iterator;
@@ -166,8 +166,13 @@ public class StartQuiz extends FragmentActivity implements IF_QuizUI{
 			i.next().saveAnswers();
 		}
 		
-		quiz.evaluateQuiz();	
-		
+		quiz.evaluateQuiz();
+
+		Application app = Application.getApplicationInstance();
+		Bundle bundle = new Bundle();
+		bundle.putString("quiz_name", quiz.getDescription());
+		app.getFirebaseAnalytics().logEvent("evaluate_quiz", bundle);
+
 	}
 
 	@Override

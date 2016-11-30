@@ -1,17 +1,20 @@
-<menu xmlns:android="http://schemas.android.com/apk/res/android" >
-	
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".Main">
+
     <item
         android:id="@+id/help"
         android:orderInCategory="10"
-        android:showAsAction="ifRoom"
-        android:icon="@drawable/help"
+        app:showAsAction="ifRoom"
+        android:icon="@mipmap/help"
         android:title="@string/action_help"/>
     
     <item
         android:id="@+id/about"
         android:orderInCategory="20"
-        android:showAsAction="ifRoom"
-        android:icon="@drawable/about"
+        app:showAsAction="ifRoom"
+        android:icon="@mipmap/about"
         android:title="@string/action_about"/>
 
 </menu>

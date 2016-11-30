@@ -10,35 +10,36 @@ import android.os.StrictMode;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
-import org.varunverma.CommandExecuter.ResultObject;
+import com.ayansh.CommandExecuter.ResultObject;
+import com.ayansh.hanuquiz.Application;
+import com.ayansh.hanuquiz.HanuFCMMessagingService;
+import com.google.firebase.messaging.RemoteMessage;
+
 import org.varunverma.abapquiz.billingutil.IabException;
 import org.varunverma.abapquiz.billingutil.IabHelper;
 import org.varunverma.abapquiz.billingutil.IabHelper.OnIabSetupFinishedListener;
 import org.varunverma.abapquiz.billingutil.IabResult;
 import org.varunverma.abapquiz.billingutil.Inventory;
 import org.varunverma.abapquiz.billingutil.Purchase;
-import org.varunverma.hanuquiz.Application;
-import org.varunverma.hanuquiz.HanuGCMListenerService;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
-public class AppGcmListenerService extends HanuGCMListenerService {
+public class AppGcmListenerService extends HanuFCMMessagingService {
 
-	private String from;
-	private Bundle data;
+	private RemoteMessage remoteMessage;
 
 	@Override
-	public void onMessageReceived(String from, Bundle data) {
-		
+	public void onMessageReceived(RemoteMessage remoteMessage) {
+
 		/*
 		 * We must first initialize billing helper.
 		 * So that we know if this is a free user or paid user !
 		 */
-		this.from = from;
-		this.data = data;
-		
+		this.remoteMessage = remoteMessage;
+
 		// Initialize the application
 		Application app = Application.getApplicationInstance();
 		app.setContext(this.getApplicationContext());
@@ -124,16 +125,16 @@ public class AppGcmListenerService extends HanuGCMListenerService {
 		Log.i(Application.TAG, "Setting new thread policy");
 		StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
 	    StrictMode.setThreadPolicy(policy);
-		
-		String message = data.getString("message");
+
+		String message = remoteMessage.getData().get("message");
 
 		if (message.contentEquals("InfoMessage")) {
 			// Show Info Message to the User
-			showInfoMessage(data);
+			showInfoMessage(remoteMessage.getData());
 
 		} else {
 
-			ResultObject result = processMessage(from,data);
+			ResultObject result = processMessage(remoteMessage);
 			
 			if(result.isCommandExecutionSuccess()){
 				Log.v(Application.TAG, "Command Execution Success");
@@ -149,11 +150,11 @@ public class AppGcmListenerService extends HanuGCMListenerService {
 		
 	}
 
-	private void showInfoMessage(Bundle data) {
+	private void showInfoMessage(Map<String,String> data) {
 		// Show Info Message
-		String subject = data.getString("subject");
-		String content = data.getString("content");
-		String mid = data.getString("message_id");
+		String subject = data.get("subject");
+		String content = data.get("content");
+		String mid = data.get("message_id");
 		if(mid == null || mid.contentEquals("")){
 			mid = "0";
 		}
@@ -174,10 +175,10 @@ public class AppGcmListenerService extends HanuGCMListenerService {
 		Notification notification = new NotificationCompat.Builder(this)
 										.setContentTitle(subject)
 										.setContentText(content)
-										.setSmallIcon(R.drawable.ic_launcher)
+										.setSmallIcon(R.mipmap.ic_launcher)
 										.setContentIntent(pendingIntent).build();
 
-		notification.icon = R.drawable.ic_launcher;
+		notification.icon = R.mipmap.ic_launcher;
 		notification.tickerText = subject;
 		notification.when = System.currentTimeMillis();
 
@@ -209,7 +210,7 @@ public class AppGcmListenerService extends HanuGCMListenerService {
 		NotificationCompat.Builder notifBuilder = new NotificationCompat.Builder(this)
 														.setContentTitle(title)
 														.setContentInfo(String.valueOf(quizzesDownloaded))
-														.setSmallIcon(R.drawable.ic_launcher)
+														.setSmallIcon(R.mipmap.ic_launcher)
 														.setContentIntent(pendingIntent);
 
 		NotificationCompat.InboxStyle inboxStyle = new NotificationCompat.InboxStyle();
@@ -227,7 +228,7 @@ public class AppGcmListenerService extends HanuGCMListenerService {
 		notifBuilder.setStyle(inboxStyle);
 
 		Notification notification = notifBuilder.build();
-		notification.icon = R.drawable.ic_launcher;
+		notification.icon = R.mipmap.ic_launcher;
 		notification.tickerText = title;
 		notification.when = System.currentTimeMillis();
 

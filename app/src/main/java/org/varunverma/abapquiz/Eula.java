@@ -8,8 +8,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
-import org.varunverma.hanuquiz.Application;
-
 import android.app.Activity;
 import android.content.res.Resources;
 import android.os.Bundle;
@@ -17,6 +15,8 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.webkit.WebView;
 import android.widget.Button;
+
+import com.ayansh.hanuquiz.Application;
 
 /**
  * @author varun

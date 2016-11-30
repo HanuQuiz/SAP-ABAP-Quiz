@@ -3,11 +3,11 @@
  */
 package org.varunverma.abapquiz;
 
-import org.varunverma.hanuquiz.QuizManager;
-
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
+
+import com.ayansh.hanuquiz.QuizManager;
 
 /**
  * @author varun
