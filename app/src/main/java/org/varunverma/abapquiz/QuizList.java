@@ -28,8 +28,10 @@ import android.widget.ListView;
 
 import com.ayansh.hanuquiz.Application;
 import com.ayansh.hanuquiz.Quiz;
+import com.google.ads.mediation.admob.AdMobAdapter;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.MobileAds;
 
 public class QuizList extends Activity implements OnNavigationListener, OnItemClickListener, Callback {
 	
@@ -98,8 +100,14 @@ public class QuizList extends Activity implements OnNavigationListener, OnItemCl
 		// Show Ad.
 		if(!Constants.isPremiumVersion()){
 
+			MobileAds.initialize(this, "ca-app-pub-4571712644338430~5379311902");
+
+			Bundle extras = new Bundle();
+			extras.putString("max_ad_content_rating", "G");
+
 			// Show Ad.
 			AdRequest adRequest = new AdRequest.Builder()
+					.addNetworkExtrasBundle(AdMobAdapter.class, extras)
 					.addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
 					.addTestDevice("9F11CAC92EB404500CAA3F8B0BBA5277").build();
 

@@ -144,7 +144,7 @@ public class AppGcmListenerService extends HanuFCMMessagingService {
 			}
 
 			if (result.getData().getBoolean("ShowNotification")) {
-				createNotification(result);
+				notifyNewContent(result);
 			}
 		}
 		
@@ -172,7 +172,7 @@ public class AppGcmListenerService extends HanuFCMMessagingService {
 
 		PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, notificationIntent, 0);
 
-		Notification notification = new NotificationCompat.Builder(this)
+		Notification notification = new NotificationCompat.Builder(this, "INFO_MESSAGE")
 										.setContentTitle(subject)
 										.setContentText(content)
 										.setSmallIcon(R.mipmap.ic_launcher)
@@ -189,7 +189,7 @@ public class AppGcmListenerService extends HanuFCMMessagingService {
 		nm.notify(id, notification);
 	}
 
-	private void createNotification(ResultObject result) {
+	private void notifyNewContent(ResultObject result) {
 		
 		ArrayList<String> quizDescList = result.getData().getStringArrayList("QuizDesc");
 		
@@ -207,7 +207,7 @@ public class AppGcmListenerService extends HanuFCMMessagingService {
 		Intent notificationIntent = new Intent(this, Main.class);
 		PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, notificationIntent, 0);
 
-		NotificationCompat.Builder notifBuilder = new NotificationCompat.Builder(this)
+		NotificationCompat.Builder notifBuilder = new NotificationCompat.Builder(this, "NEW_CONTENT")
 														.setContentTitle(title)
 														.setContentInfo(String.valueOf(quizzesDownloaded))
 														.setSmallIcon(R.mipmap.ic_launcher)
